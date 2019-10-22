@@ -1,12 +1,23 @@
-const Header = ({ title }) => <h1>{title}</h1>
-const arr = [1, 2, 3]
-const App = <React.Fragment>
-  {
+const code = `
+function render() {
+  const { show } = this.state
+  const { msg } = this.props
+  return (
     <div>
-      arr.map((item) => (
-        <Header key={item.id} title={item.title} />
-      ))
-      <div>loading</div>
+    <button onClick={this.showToast}>{ show ? '隐藏' : '显示'}Toast</button>
+    {
+      show && <div style={styles.container}>
+        <div style={styles.modalWrapper}>
+          { msg || 'toast' }
+        </div>
+      </div>
+    }
     </div>
-  }
-</React.Fragment>
+  )
+}`
+
+const t = require("babel-core").transform(code, {
+  "presets": ["env"],
+  "plugins": ["transform-vue-jsx"]
+})
+console.log(t.code)
