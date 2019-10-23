@@ -1,17 +1,19 @@
 const code = `
 
-const Header = ({ title }) => <h1>{title}</h1>
-const arr = [1, 2, 3]
-const App = <React.Fragment>
-  {
-    <div>
-      arr.map((item) => (
-        <Header key={item.id} title={item.title} />
-      ))
-      <div>loading</div>
-    </div>
-  }
-</React.Fragment>
+const Card = ({ header, bodyStyle, children }) =>  {
+  const style = () => {}
+  const className = () => {}
+    return (
+      <div style={style()} className={className('el-card')}>
+        {
+          header && <div className="el-card__header">{ header }</div>
+        }
+        <div className="el-card__body" style={ bodyStyle }>
+          { children }
+        </div>
+      </div>
+    )
+}
 `
   // <p v-else>No message.</p>
   const rest = require("@babel/core").transform(code, {
@@ -20,7 +22,8 @@ const App = <React.Fragment>
       "pragma": "h", // default pragma is React.createElement
       "pragmaFrag": "React.Fragment", // default is React.Fragment
       // "throwIfNamespace": false // defaults to true
-    }]
+    }],
+    ["@babel/plugin-proposal-class-properties"]
   ]
 });
 console.log(rest.code);

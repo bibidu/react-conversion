@@ -1,12 +1,17 @@
-const Header = ({ title }) => <h1>{title}</h1>
-const arr = [1, 2, 3]
-const App = <React.Fragment>
-  {
-    <div>
-      arr.map((item) => (
-        <Header key={item.id} title={item.title} />
-      ))
-      <div>loading</div>
-    </div>
+
+const App = ({ list = [1, 2, 3] }) => {
+  const onClick = () => {
+    alert(1)
   }
-</React.Fragment>
+  const Text = (props) => {
+    return <h2>{props.msg}</h2>
+  }
+  return (
+    <div className="app" onClick={onClick}>
+      {
+        list.map(item => <h1 key={item}>{item}</h1>)
+      }
+      <Text msg="gogogo" />
+    </div>
+  )
+}
