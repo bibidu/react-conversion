@@ -110,6 +110,70 @@ const App = h("div", null, arr.map(item => h(Header, {
   title: item.title
 })));
 ```
+
+```js
+function render() {
+  const { show } = this.state
+  const { msg } = this.props
+  return (
+    <div>
+    <button onClick={this.showToast}>{ show ? '隐藏' : '显示'}Toast</button>
+    {
+      show && <div style={styles.container}>
+        <div style={styles.modalWrapper}>
+          { msg || 'toast' }
+        </div>
+      </div>
+    }
+    </div>
+  )
+}
+```
+
+```js
+// vue
+function render() {
+  var show = this.state.show;
+  var msg = this.props.msg;
+
+  return h('div', [h(
+    'button',
+    {
+      on: {
+        'click': this.showToast
+      }
+    },
+    [show ? '隐藏' : '显示', 'Toast']
+  ), show && h(
+    'div',
+    { style: styles.container },
+    [h(
+      'div',
+      { style: styles.modalWrapper },
+      [msg || 'toast']
+    )]
+  )]);
+}
+```
+
+```js
+// react
+function render() {
+  const {
+    show
+  } = this.state;
+  const {
+    msg
+  } = this.props;
+  return h("div", null, h("button", {
+    onClick: this.showToast
+  }, show ? '隐藏' : '显示', "Toast"), show && h("div", {
+    style: styles.container
+  }, h("div", {
+    style: styles.modalWrapper
+  }, msg || 'toast')));
+}
+```
 ## 区别
 
 ### 事件
