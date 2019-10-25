@@ -1,23 +1,17 @@
-const code = `
-function render() {
-  const { show } = this.state
-  const { msg } = this.props
+
+const App = ({ list = [1, 2, 3] }) => {
+  const onClick = () => {
+    alert(1)
+  }
+  const Text = (props) => {
+    return <h2>{props.msg}</h2>
+  }
   return (
-    <div>
-    <button onClick={this.showToast}>{ show ? '隐藏' : '显示'}Toast</button>
-    {
-      show && <div style={styles.container}>
-        <div style={styles.modalWrapper}>
-          { msg || 'toast' }
-        </div>
-      </div>
-    }
+    <div className="app" onClick={onClick}>
+      {
+        list.map(item => <h1 key={item}>{item}</h1>)
+      }
+      <Text msg="gogogo" />
     </div>
   )
-}`
-
-const t = require("babel-core").transform(code, {
-  "presets": ["env"],
-  "plugins": ["transform-vue-jsx"]
-})
-console.log(t.code)
+}

@@ -1,20 +1,17 @@
 const code = `
-
-class Button {
-  render(){
+const Card = ({ header, bodyStyle, children }) =>  {
+  const style = () => {}
+  const className = () => {}
     return (
-      <div>
-      <button onClick={this.show}>{ show ? '隐藏' : '显示'}Toast</button>
-      {
-        show && <div style={styles.container}>
-          <div style={styles.modalWrapper}>
-            { msg || 'toast' }
-          </div>
+      <div style={style()} className={className('el-card')}>
+        {
+          header && <div className="el-card__header">{ header }</div>
+        }
+        <div className="el-card__body" style={ bodyStyle }>
+          { children }
         </div>
-      }
       </div>
     )
-  }
 }
 `
   // <p v-else>No message.</p>
@@ -24,7 +21,8 @@ class Button {
       "pragma": "h", // default pragma is React.createElement
       "pragmaFrag": "React.Fragment", // default is React.Fragment
       // "throwIfNamespace": false // defaults to true
-    }]
+    }],
+    ["@babel/plugin-proposal-class-properties"]
   ]
 });
 console.log(rest.code);

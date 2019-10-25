@@ -191,3 +191,22 @@ function render() {
 ### 标签存在多个属性
 - vue-jsx会编译为  `h(Header, { key: item.id, attrs: { title: item.title }` (非key属性会嵌套在attrs属性中)
 - react-jsx会编译为 `h(Header, { key: item.id, title: item.title })` (key与其他属性平级)
+
+
+# 目前的问题
+- [ ] vue的jsx写法如何支持嵌套:
+
+```js
+// jsx
+const Text = (props) => {
+  return <h2>{props.msg}</h2>
+}
+<Text msg="gogogo" />
+// jsx的编译结果: 无法正常渲染
+var Text = function Text(props) {
+  return h("h2", [props.msg]);
+};
+h(Text, {
+  attrs: { msg: "gogogo" }
+})
+```

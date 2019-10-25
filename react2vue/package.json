@@ -1,7 +1,6 @@
 {
-  "name": "react-jsx",
+  "name": "react2vue",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,9 +8,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-transform-react-jsx": "^7.3.0"
-  }
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "acorn": "^7.1.0",
+    "estree-walker": "^0.8.1"
+  },
+  "devDependencies": {},
+  "description": ""
 }
