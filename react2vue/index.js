@@ -1,5 +1,8 @@
 const toReactJsx = require('./toReactJsx')
-const extract = require('./extract')
+const {
+  h,
+  dispatchWithParams
+} = require('./extract')
 
 
 const example = `
@@ -19,10 +22,18 @@ const App = ({ list = [1, 2, 3] }) => {
     </div>
   )
 }
-module.exports = App
 `
 
 const reactJsx = toReactJsx(example)
 console.log(reactJsx);
 // const extractCode = extract(reactJsx)
-// console.log(extractCode)
+
+const fn = new Function(`
+let componentId = 0
+var h = ${h};
+var dispatchWithParams = ${dispatchWithParams}
+${reactJsx}
+return App`)()
+console.log(fn.toString())
+const res = fn({})
+console.log(res);
