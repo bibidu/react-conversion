@@ -5,25 +5,23 @@ var React = {
     }
   },
   createElement(tagNameOrComponentName, attrs, ...children) {
-    let str = '', attrString = '', attrStringDependencies = {}
-    str += `<${tagNameOrComponentName}`
-
-    if (attrs !== null && Object.keys(attrs).length) {
-      [attrString, attrStringDependencies] = generateAttrString(attrs)
-    }
-
-    str += `${attrString}>`
-
+    const tree = {}
+    tree.children = []
+    tree.tagName = tagNameOrComponentName
+    tree.attrs = attrs
     children.forEach(child => {
-      str += `\n  ` + replaceMark(child) + `\n  `
+      if (typeof child === 'string') {
+        tree.children.push({
+          tagName: 'text',
+          attrs: null,
+          value: child,
+          children: []
+        })
+      } else {
+        tree.children.push(child)
+      }
     })
-    str += `</${tagNameOrComponentName}>`
-
-    if (Object.keys(attrStringDependencies).length) {
-      console.log('attrStringDependencies收集的依赖')
-      console.log(attrStringDependencies)
-    }
-    return str
+    return tree
   }
 }
 class Button extends React.Component{
@@ -88,8 +86,9 @@ function generateAttrString(attrs) {
         const value = replaceMark(attrs[attr])
         const [prefix, restValue] = extractUsePrefix(value)
         attrString += ` ${eventName[attr]}="${restValue}"`
-        attrStringDependencies[prefix === 'this' ? '@this@' : prefix] = {
+        attrStringDependencies[value] = {
           raw: value,
+          prefix,
           restValue: restValue
         }
       }
@@ -119,22 +118,22 @@ const ctx = bindCtx(instance)
 const renderString = getRenderString(instance)
 const markedTernaryRenderString = markTernary(renderString)
 const renderFn = new Function(`return ${markedTernaryRenderString}`)()
-console.log(`<div>
-<button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
-<div>
-  <div>
-    { msg || 'toast' }
-  </div>
-</div>
-</div>`)
-console.log(renderFn.toString())
-console.log('---------')
-const res = renderFn.call(ctx)
+// console.log(`<div>
+// <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
+// <div>
+//   <div>
+//     { msg || 'toast' }
+//   </div>
+// </div>
+// </div>`)
+// console.log(renderFn.toString())
+// console.log('---------')
+const jsxTree = renderFn.call(ctx)
 
 
 
 
-console.log(res)
+console.log(jsxTree)
 
 console.log('')
 console.log('')
