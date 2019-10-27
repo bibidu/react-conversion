@@ -3,19 +3,19 @@ const {
   mockButtonString,
   mockRenderString,
 } = require('./mock.js')
-
+const React = require('./React')
+const toTemplate = require('./toTemplate')
 const {
-  React,
   createInstance,
   getRenderString,
   bindCtx,
-  replaceMark,
-  generateAttrString,
+  replaceAttr,
   extractUsePrefix,
   markTernary,
   jsxCompile,
-  stringify,
-  parseFunctionMark
+  parseFunctionMark,
+  fn,
+  toObject,
 } = require('./utils')
 
 const target = 'vue'
@@ -30,19 +30,9 @@ let renderString, ctx = { props: {} }
 
 // TODO: 标记React.createElement嵌套结构中的·三目· ·方法· 等 [mock]
 const markedTernaryRenderString = !mock ? markTernary(renderString) : mockRenderString
-console.log(`var React=${stringify(React)}`);
-// const renderFn = new Function(`
-// var React=${stringify(markedTernaryRenderString)}
-// return ${markedTernaryRenderString}
-// `)()
-
-// console.log(renderFn.call(ctx))
-
-// // console.log('=============');
-// const jsxTree = renderFn.call(ctx)
-// // console.log('++++++++++');
-
-// console.log(jsxTree());
-
+const f = fn(`var React = ${toObject(React)};return ${markedTernaryRenderString}`)
+const jsxTree = f().call(ctx)
+const vueHtml = toTemplate(target, jsxTree)
+console.log(vueHtml);
  
 

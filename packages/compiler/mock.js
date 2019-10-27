@@ -1,6 +1,4 @@
-const {
-  React
-} = require('./utils')
+const React = require('./React')
 
 const mockButtonString = ` class Button extends React.Component{
   show = () => {
