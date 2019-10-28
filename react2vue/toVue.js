@@ -22,31 +22,51 @@ class Button extends React.Component{
   }
 }`
 const babel = require("@babel/core")
-const t = require("@babel/types")
-const generate = require('@babel/generator')
-const r = babel.transform(code, {
-  presets: ["@babel/preset-react"],
-  "plugins": ["@babel/plugin-proposal-class-properties"]
+const traverse = require('@babel/traverse').default
+const parser = require('@babel/parser')
+const t = require('@babel/types')
+const generate = require('@babel/generator').default
+const r = babel.transformSync(code, {
+  presets: [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  plugins: ["@babel/plugin-proposal-class-properties"]
 });
-console.log(r.code);
-const revertCode = babel.transform(r.code, {
-  plugins: [  
-    { 
-      visitor: {
-        ConditionalExpression(_path) {
-          var preOperationAST = babel.template('FUN_NAME()');
-          console.log('ConditionalExpression')
-          _path.replaceWith(
-            preOperationAST({
-              FUN_NAME: t.identifier('dxz'),
-            })
-          )
+// console.log(r.code)
+const ast = parser.parse(r.code)
+traverse(ast, {
+  CallExpression(path) {
+    if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
+      Array.from(path.node.arguments).forEach(arg => {
+        if (arg.type === 'ConditionalExpression') {
+          const code = generate(arg, {}).code
+          path.replaceWith(t.identifier("`@@ternary__" + code + "`"))
         }
-      }
-    },
-  ]
+      })
+    }
+  }
 })
-console.log(revertCode);
+const compiled = generate(ast, {}, r.code)
+console.log(compiled.code);
+// const revertCode = babel.transform(r.code, {
+//   plugins: [  
+//     { 
+//       visitor: {
+//         ConditionalExpression(_path) {
+//           var preOperationAST = babel.template('FUN_NAME()');
+//           console.log('ConditionalExpression')
+//           _path.replaceWith(
+//             preOperationAST({
+//               FUN_NAME: t.identifier('dxz'),
+//             })
+//           )
+//         }
+//       }
+//     },
+//   ]
+// })
+// console.log(revertCode);
 // let cache = babel.transform(
 //   code,
 //   {

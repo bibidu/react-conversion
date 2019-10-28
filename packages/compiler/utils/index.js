@@ -37,6 +37,17 @@ function toObject(obj){
 	i += '}'
   return i;
 }
+function safeGet(source, expression, def = undefined) {
+  if (typeof source !== 'object' || !expression.includes('.')) {
+    return def
+    // return source
+  }
+  const splitExpArr = expression.split('.').slice(1)
+  return splitExpArr.reduce((prev, curr) => {
+    if (!prev) return def
+    return prev[curr] || def
+  }, source)
+ }
 
 module.exports = {
   createInstance,
@@ -47,4 +58,5 @@ module.exports = {
   jsxCompile,
   fn,
   toObject,
+  safeGet
 }
