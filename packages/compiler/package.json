@@ -1,0 +1,21 @@
+{
+  "name": "compiler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "React.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/generator": "^7.6.4",
+    "@babel/preset-react": "^7.6.3",
+    "@babel/types": "^7.6.3",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/traverse": "^7.6.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

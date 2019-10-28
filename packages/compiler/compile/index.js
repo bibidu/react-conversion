@@ -9,7 +9,7 @@ function ast2code(ast) {
   return code
 }
 
-module.exports = function compile(code) {
+function compile(code) {
   const r = babel.transformSync(code, {
     presets: [
       "@babel/preset-env",
@@ -35,3 +35,27 @@ module.exports = function compile(code) {
   const compiled = generate(ast, {}, r.code)
   return compiled.code
 }
+// test
+const code = `class Button extends React.Component{
+  show = () => {
+    console.log('show')
+    // this.setState({
+    // 	cool: true
+    // })
+  }
+  render(){
+    const { msg } = this.props
+    return (
+      <div>
+        <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
+        <div>
+          <div>
+            { msg || 'toast' }
+          </div>
+        </div>
+      </div>
+    )
+  }
+}`
+console.log(compile(code))
+// module.exports = compile
