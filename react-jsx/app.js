@@ -1,15 +1,24 @@
 const code = `
-
-const Card = ({ msg }) =>  {
+class Button extends React.Component{
+  show = () => {
+    console.log('show')
+    this.setState({
+    	cool: true
+    })
+  }
+  render(){
+    const { msg } = this.props
     return (
       <div>
-        {
-          () => (
-            <h1>{msg || '123'}</h1>
-          )
-        }
+        <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
+        <div>
+          <div>
+            { msg || 'toast' }
+          </div>
+        </div>
       </div>
     )
+  }
 }
 `
   // <p v-else>No message.</p>
