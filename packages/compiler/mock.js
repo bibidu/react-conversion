@@ -1,6 +1,6 @@
 const React = require('./React')
 
-const mockButtonString = ` class Button extends React.Component{
+const componentString = ` class Button extends React.Component{
   show = () => {
     console.log('show')
     // this.setState({
@@ -11,7 +11,7 @@ const mockButtonString = ` class Button extends React.Component{
     const { msg } = this.props
     return (
       <div>
-        <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
+        <button onClick={this.show}>{ msg ? '隐藏1' : '显示'}Toast</button>
         <div>
           <div>
             { msg || 'toast' }
@@ -21,27 +21,6 @@ const mockButtonString = ` class Button extends React.Component{
     )
   }
 }`
-class Button extends React.Component{
-  // show = () => {
-  //   console.log('show')
-  //   // this.setState({
-  //   // 	cool: true
-  //   // })
-  // }
-  // render(){
-  //   const { msg } = this.props
-  //   return (
-  //     <div>
-  //       <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
-  //       <div>
-  //         <div>
-  //           { msg || 'toast' }
-  //         </div>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-}
 const mockRenderString = `function render() {
   var msg = this.props.msg;
   return React.createElement("div", null, React.createElement("button", {
@@ -50,7 +29,6 @@ const mockRenderString = `function render() {
 }`
 
 module.exports = {
-  Button,
-  mockButtonString,
+  componentString,
   mockRenderString
 }
