@@ -19,15 +19,22 @@ const React = {
           value: child,
           children: []
         })
-      } else if (Array.isArray(child)) {
-        // console.log('array')
-        // console.log(child)
       }
       else {
         child && tree.children.push(child)
       }
     })
     return tree
+  },
+  map: function(list, item, index) {
+    return function(fn) {
+      const tree = fn()
+      tree.attrs = tree.attrs || {}
+      tree.for = {
+        list, item, index
+      }
+      return tree
+    }
   }
 }
 

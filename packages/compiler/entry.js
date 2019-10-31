@@ -34,13 +34,14 @@ const target = 'vue'
 const mock = true
 
 const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
-// console.log(renderString)
 let ctx = createPropCtx(params.props)
+// console.log(renderString)
 const f = fn(`var React = ${toObject(React)};return ${renderString}`)
 const jsxTree = f().call(ctx)
-// console.log(jsxTree)
-fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
+// fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
 const vueHtml = toTemplate(target, jsxTree)
-// console.log(vueHtml);
+// console.log('vueHtml');
+console.log(vueHtml);
+ 
  
 

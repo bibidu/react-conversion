@@ -28,7 +28,7 @@ function compile(code) {
     Program(path) {
       Array.from(path.node.body).forEach(child => {
         if (child.type == 'ExpressionStatement') {
-          if (child.expression.left.property.name === 'propTypes') {
+          if (child.expression.left && child.expression.left.property.name === 'propTypes') {
             Array.from(child.expression.right.properties).forEach(prop => {
               props[prop.key.name] = {
                 prop: prop.key.name,
@@ -42,7 +42,7 @@ function compile(code) {
     CallExpression(path) {
       if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
         const attrExpression = path.node.arguments[1]
-        const chlidrenElement = path.node.arguments[2]
+        let chlidrenElement = path.node.arguments[2]
         // attrs的每个value添加标记
         if (attrExpression !== null && attrExpression.type === 'ObjectExpression') {
           Array.from(attrExpression.properties).forEach(prop => {
@@ -50,11 +50,30 @@ function compile(code) {
             prop.value = t.identifier("`@@attrValue__" + code + "`")
           })
         }
-        if (chlidrenElement.type === 'Literal') {
-          // list.map
-          if (chlidrenElement.callee.object.type === 'Identifier') {
-            const list = chlidrenElement.callee.object.name
+        if (chlidrenElement.type === 'CallExpression') {
+              // list.map
+          const type = chlidrenElement.callee.object.type
+          if (type === 'Identifier' || 'ArrayExpression') {
+            let methodCaller = chlidrenElement.callee.object
             const method = chlidrenElement.callee.property.name
+            const methodCallerStr = ast2code(methodCaller)
+            if (method === 'map') {
+              const identifierParam = `"${methodCallerStr}"`
+              const fnParams = []
+              // 函数入参
+              const fn = Array.from(path.node.arguments[2].arguments)[0]
+              fn.params.forEach(param => {
+                const args = ast2code(param)
+                fnParams.push(`"${args}"`)
+              })
+              // 修改为React.map([1, 2], ['item', 'index'])(() => {})
+              path.node.arguments[2].callee.object = t.identifier("React")
+              path.node.arguments[2].callee.property = 
+                t.identifier(method + `(${identifierParam}, ${fnParams})`)
+              
+              
+              // console.log(Object.keys(fn))
+            }
           }
         }
       }
@@ -69,7 +88,7 @@ function compile(code) {
     }
   })
   const compiled = generate(ast, {}, r.code)
-// console.log(compiled.code)
+console.log(compiled.code)
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new Button({})`)
   renderString = 'function ' + f().render.toString()
   return {

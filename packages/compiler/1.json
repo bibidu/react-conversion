@@ -1,0 +1,59 @@
+{
+    "children": [
+        {
+            "children": [
+                {
+                    "tagName": "text",
+                    "attrs": null,
+                    "value": "[1, 2].map(item => (",
+                    "children": []
+                },
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "tagName": "text",
+                                    "attrs": null,
+                                    "value": "button",
+                                    "children": []
+                                }
+                            ],
+                            "tagName": "nutton",
+                            "attrs": null
+                        }
+                    ],
+                    "tagName": "h1",
+                    "attrs": null
+                },
+                {
+                    "tagName": "text",
+                    "attrs": null,
+                    "value": "))",
+                    "children": []
+                },
+                {
+                    "children": [
+                        {
+                            "tagName": "text",
+                            "attrs": null,
+                            "value": "12",
+                            "children": []
+                        }
+                    ],
+                    "tagName": "span",
+                    "attrs": null
+                }
+            ],
+            "tagName": "div",
+            "attrs": {
+                "id": "@@attrValue__\"container\""
+            }
+        }
+    ],
+    "tagName": "div",
+    "attrs": {
+        "id": "@@attrValue__\"app\"",
+        "onClick": "@@attrValue__this.show"
+    }
+}

@@ -1,6 +1,19 @@
 const React = require('./React')
 
 const componentString = `
+class Button extends React.Component{
+render() {return<div id="container">
+          {
+            [1, 2].map((item, idx) => (
+              <h1>
+                <button key={idx}>{item}</button>
+              </h1>
+            ))
+          }
+          <span>12</span>
+        </div>
+        }}`
+const componentString1 = `
 
 class Button extends React.Component{
   show = () => {
@@ -14,11 +27,13 @@ class Button extends React.Component{
     return (
       <div id="app" onClick={this.show}>
         <div id="container">
-          [1, 2].map(item => (
-            <h1>
-              <nutton>button</nutton>
-            </h1>
-          ))
+          {
+            list.map(item => (
+              <h1>
+                <nutton>button</nutton>
+              </h1>
+            ))
+          }
           <span>12</span>
         </div>
       </div>
