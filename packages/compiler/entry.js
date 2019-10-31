@@ -1,3 +1,4 @@
+const fs = require('fs')
 const {
   componentString,
   mockRenderString,
@@ -16,21 +17,30 @@ const {
   parseFunctionMark,
   fn,
   toObject,
+  getTypeDefault
 } = require('./utils')
+
+function createPropCtx(props) {
+  const obj = {}
+  Object.keys(props).forEach(p => {
+    obj[p] = getTypeDefault(props[p].type)
+  })
+  return {
+    props: obj
+  }
+}
 
 const target = 'vue'
 const mock = true
 
-const reactComponent = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
-// const props = { msg: '', show: '' } // TODO: 读取react组件 得到props [mock]
-let ctx = { props: {} }
-// let renderString
-// TODO: 标记React.createElement嵌套结构中的·三目· ·方法· 等 [mock]
-// mockRenderString
-const markedTernaryRenderString = reactComponent
-const f = fn(`var React = ${toObject(React)};return ${markedTernaryRenderString}`)
+const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
+// console.log(renderString)
+let ctx = createPropCtx(params.props)
+const f = fn(`var React = ${toObject(React)};return ${renderString}`)
 const jsxTree = f().call(ctx)
+// console.log(jsxTree)
+fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
 const vueHtml = toTemplate(target, jsxTree)
-console.log(vueHtml);
+// console.log(vueHtml);
  
 

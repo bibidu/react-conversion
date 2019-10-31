@@ -5,6 +5,8 @@ const React = {
     }
   },
   createElement: function(tagNameOrComponentName, attrs, ...children) {
+    // console.log(`=========`)
+    // console.log(tagNameOrComponentName)
     const tree = {}
     tree.children = []
     tree.tagName = tagNameOrComponentName
@@ -17,7 +19,11 @@ const React = {
           value: child,
           children: []
         })
-      } else {
+      } else if (Array.isArray(child)) {
+        // console.log('array')
+        // console.log(child)
+      }
+      else {
         child && tree.children.push(child)
       }
     })

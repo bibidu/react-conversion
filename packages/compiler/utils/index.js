@@ -48,6 +48,13 @@ function safeGet(source, expression, def = undefined) {
     return prev[curr] || def
   }, source)
  }
+function getTypeDefault(type) {
+  const typeDefault = {
+    string: '',
+    Array: [1]
+  }
+  return typeDefault[type]
+}
 
 module.exports = {
   createInstance,
@@ -58,5 +65,6 @@ module.exports = {
   jsxCompile,
   fn,
   toObject,
-  safeGet
+  safeGet,
+  getTypeDefault
 }

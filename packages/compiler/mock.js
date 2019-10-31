@@ -1,6 +1,8 @@
 const React = require('./React')
 
-const componentString = ` class Button extends React.Component{
+const componentString = `
+
+class Button extends React.Component{
   show = () => {
     console.log('show')
     // this.setState({
@@ -8,19 +10,25 @@ const componentString = ` class Button extends React.Component{
     // })
   }
   render(){
-    const { msg } = this.props
+    const { msg, list } = this.props
     return (
-      <div>
-        <button onClick={this.show}>{ msg ? '隐藏1' : '显示'}Toast</button>
-        <div>
-          <div>
-            { msg || 'toast' }
-          </div>
+      <div id="app" onClick={this.show}>
+        <div id="container">
+          [1, 2].map(item => (
+            <h1>
+              <nutton>button</nutton>
+            </h1>
+          ))
+          <span>12</span>
         </div>
       </div>
     )
   }
-}`
+}
+Button.propTypes = {
+  msg: 'string',
+  list: 'Array'
+};`
 const mockRenderString = `function render() {
   var msg = this.props.msg;
   return React.createElement("div", null, React.createElement("button", {

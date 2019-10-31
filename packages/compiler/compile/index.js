@@ -13,7 +13,7 @@ function ast2code(ast) {
 }
 
 function compile(code) {
-  let renderString
+  let renderString, props = {}
   const r = babel.transformSync(code, {
     presets: [
       // "@babel/preset-env",
@@ -25,14 +25,37 @@ function compile(code) {
   const ast = parser.parse(r.code)
 
   traverse(ast, {
+    Program(path) {
+      Array.from(path.node.body).forEach(child => {
+        if (child.type == 'ExpressionStatement') {
+          if (child.expression.left.property.name === 'propTypes') {
+            Array.from(child.expression.right.properties).forEach(prop => {
+              props[prop.key.name] = {
+                prop: prop.key.name,
+                type: prop.value.value,
+              }
+            })
+          }
+        }
+      })
+    },
     CallExpression(path) {
       if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
-        const objectExp = path.node.arguments[1]
-        if (objectExp !== null && objectExp.type === 'ObjectExpression') {
-          Array.from(objectExp.properties).forEach(prop => {
+        const attrExpression = path.node.arguments[1]
+        const chlidrenElement = path.node.arguments[2]
+        // attrs的每个value添加标记
+        if (attrExpression !== null && attrExpression.type === 'ObjectExpression') {
+          Array.from(attrExpression.properties).forEach(prop => {
             const code = ast2code(prop.value)
             prop.value = t.identifier("`@@attrValue__" + code + "`")
           })
+        }
+        if (chlidrenElement.type === 'Literal') {
+          // list.map
+          if (chlidrenElement.callee.object.type === 'Identifier') {
+            const list = chlidrenElement.callee.object.name
+            const method = chlidrenElement.callee.property.name
+          }
         }
       }
     },
@@ -46,37 +69,14 @@ function compile(code) {
     }
   })
   const compiled = generate(ast, {}, r.code)
-
+// console.log(compiled.code)
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new Button({})`)
   renderString = 'function ' + f().render.toString()
-  return renderString
+  return {
+    renderString,
+    params: {
+      props
+    }
+  }
 }
-// test
-// const code = `class Button extends React.Component{
-//   show = () => {
-//     console.log('show')
-//     // this.setState({
-//     // 	cool: true
-//     // })
-//   }
-//   render(){
-//     const { msg } = this.props
-//     return (
-//       <div>
-//         <button onClick={this.show}>{ msg ? '隐藏' : '显示'}Toast</button>
-//         <div>
-//           <div>
-//             { msg || 'toast' }
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }`
-// const p = compile(code)
-// // console.log(p)
-// // console.log(`${p};return new Button({})`)
-
-// console.log(p)
-
 module.exports = compile
