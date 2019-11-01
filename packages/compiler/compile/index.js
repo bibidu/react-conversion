@@ -21,7 +21,7 @@ function compile(code) {
     ],
     plugins: ["@babel/plugin-proposal-class-properties"]
   })
-  // console.log(r.code);
+  console.log(r.code);
   const ast = parser.parse(r.code)
 
   traverse(ast, {
@@ -76,7 +76,15 @@ function compile(code) {
             }
           }
         }
+        // && || 运算符
+        console.log(path.parent.type)
+        if (path.parent.type === 'LogicalExpression') {
+
+        }
       }
+    },
+    LogicalExpression() {
+      console.log('LogicalExpression ===============');
     },
     ConditionalExpression(path) {
       const code = ast2code(path.node)

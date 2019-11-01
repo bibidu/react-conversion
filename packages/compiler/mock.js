@@ -10,7 +10,9 @@ render() {return<div id="container">
               </h1>
             ))
           }
-          <span>12</span>
+          {
+            show && <span>12</span>
+          }
         </div>
         }}`
 const componentString1 = `
