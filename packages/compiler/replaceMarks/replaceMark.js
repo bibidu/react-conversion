@@ -6,8 +6,6 @@ module.exports = function replaceMark (str, parentFor) {
   }
   // react中attr对象的values
   if (str.startsWith(mark = '@@attrValue__')) {
-    console.log('str')
-    console.log(str)
     if (str.includes('this')) {
       const restStr = str.split(mark)[1]
       return ["", `"${restStr.split('this.')[1]}"`]

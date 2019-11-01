@@ -13,7 +13,6 @@ const {
   replaceAttr,
   extractUsePrefix,
   markTernary,
-  // jsxCompile,
   parseFunctionMark,
   fn,
   toObject,
