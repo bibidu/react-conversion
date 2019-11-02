@@ -11,7 +11,7 @@ render() {return<div id="container">
             ))
           }
           {
-            show && <span>12</span>
+            'a' && 'b' || show && <span>12</span> || d
           }
         </div>
         }}`
