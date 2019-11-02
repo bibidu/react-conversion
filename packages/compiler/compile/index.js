@@ -6,6 +6,7 @@ const { toObject } = require('../utils')
 const generate = require('@babel/generator').default
 
 const visitors = require('../visitors')
+const afterCompileMake = require('./afterCompileMake')
 
 
 
@@ -36,7 +37,8 @@ function compile(code) {
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new Button({})`)
   renderString = 'function ' + f().render.toString()
 
-
+  // 字符串后处理
+  renderString = afterCompileMake(renderString)
   return {
     renderString,
     params: {

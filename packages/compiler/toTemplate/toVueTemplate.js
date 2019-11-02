@@ -13,6 +13,18 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
   } else {
     template += `<${jsxTree.tagName}`
   }
+  if (jsxTree.if) {
+    
+    let condition = jsxTree.if.map(item => replaceMark(item)[1]).join("")
+    if (condition.slice(-2) === '&&') {
+      condition = condition.slice(0, -2)
+    }
+    if (condition.slice(-2) === '||') {
+      condition = condition.slice(0, -2)
+      condition = `!(${condition})`
+    }
+    template += ` v-if="${condition}"`
+  }
   if (jsxTree.for) {
     parentFor.unshift(jsxTree.for)
     const { list, item, index } = jsxTree.for

@@ -40,6 +40,30 @@ const jsxTree = f().call(ctx)
 // fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
 const vueHtml = toTemplate(target, jsxTree)
 // console.log('vueHtml');
+console.log(`class Button extends React.Component{
+  render() {
+    return (
+      <div id="container">
+        {
+          [1, 2].map((item, idx) => (
+            <h1>
+              <button key={idx}>{item}</button>
+            </h1>
+          ))
+        }
+        {
+          'a' && 'b' || show || (
+            <div>
+              <h1>12</h1>
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+}`)
+console.log('=============================')
+console.log('========== 编译结果 ===========')
 console.log(vueHtml);
  
  

@@ -35,6 +35,26 @@ const React = {
       }
       return tree
     }
+  },
+  logic: function(...args) {
+    const element = args[args.length - 1]
+    if (typeof element === 'object') {
+      element.if = args.slice(0, -1)
+      return element
+    } else {
+      return {
+        tagName: 'template',
+        if: args.map((i, idx) => {
+          if (typeof i === 'object' && idx !== args.length - 1) {
+            return "1"
+          }
+          return i
+        }),
+        attrs: null,
+        value: '',
+        children: []
+      }
+    }
   }
 }
 

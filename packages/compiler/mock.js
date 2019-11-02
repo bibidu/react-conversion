@@ -2,19 +2,30 @@ const React = require('./React')
 
 const componentString = `
 class Button extends React.Component{
-render() {return<div id="container">
-          {
-            [1, 2].map((item, idx) => (
-              <h1>
-                <button key={idx}>{item}</button>
-              </h1>
-            ))
-          }
-          {
-            'a' && 'b' || show && <span>12</span> || d
-          }
-        </div>
-        }}`
+  render() {
+    return (
+      <div id="container">
+        {
+          [1, 2].map((item, idx) => (
+            <h1>
+              <button key={idx}>{item}</button>
+            </h1>
+          ))
+        }
+        {
+          'a' && 'b' || show || (
+            <div>
+              <h1>12</h1>
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+}`
+// {
+//   true ? <div>123</div> : null
+// }
 const componentString1 = `
 
 class Button extends React.Component{

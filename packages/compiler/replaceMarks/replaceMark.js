@@ -21,5 +21,9 @@ module.exports = function replaceMark (str, parentFor) {
       return ["", value]
     }
   }
+  // && ||
+  if (str.startsWith(mark = '@@logic__')) {
+    return ["", str.split(mark)[1]]
+  }
   return ["", str]
 }
