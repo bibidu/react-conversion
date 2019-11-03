@@ -19,13 +19,14 @@ class Button extends React.Component{
             </div>
           )
         }
+        {
+          show ? '123s' : !visiable ? <h1 /> : null
+        }
       </div>
     )
   }
 }`
-// {
-//   true ? <div>123</div> : null
-// }
+// show ? <h1>123</h1> : <h1>456</h1>
 const componentString1 = `
 
 class Button extends React.Component{
