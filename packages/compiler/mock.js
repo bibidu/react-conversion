@@ -20,7 +20,7 @@ class Button extends React.Component{
           )
         }
         {
-          show ? '123s' : !visiable ? <h1 /> : null
+          show ? <h1>h1</h1> : !visiable ? <h2>h2</h2> : <h3>h3</h3>
         }
       </div>
     )

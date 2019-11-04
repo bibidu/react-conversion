@@ -37,6 +37,20 @@ function toObject(obj){
 	i += '}'
   return i;
 }
+function toObjectDeep(obj){
+	let i = '{'
+	Object.keys(obj).forEach(item =>{
+    if (typeof obj[item] === 'function') {
+      i += `${item}:${("" + obj[item]).replace(obj[item].name, "function")}, `
+    } else if (typeof obj[item] === 'object') {
+      i += `"${item}":${toObjectDeep(obj[item])},`
+    } else {
+		  i += `${item}:${obj[item]}, `
+    }
+	})
+	i += '}'
+  return i;
+}
 function safeGet(source, expression, def = undefined) {
   if (typeof source !== 'object' || !expression.includes('.')) {
     return def
@@ -65,6 +79,7 @@ module.exports = {
   jsxCompile,
   fn,
   toObject,
+  toObjectDeep,
   safeGet,
   getTypeDefault
 }

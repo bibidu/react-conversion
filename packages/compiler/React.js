@@ -1,3 +1,4 @@
+
 const React = {
 	Component: class {
     constructor(p){
@@ -5,8 +6,6 @@ const React = {
     }
   },
   createElement: function(tagNameOrComponentName, attrs, ...children) {
-    // console.log(`=========`)
-    // console.log(tagNameOrComponentName)
     const tree = {}
     tree.children = []
     tree.tagName = tagNameOrComponentName
@@ -55,6 +54,8 @@ const React = {
         children: []
       }
     }
+  },
+  ternary(params) {
   }
 }
 

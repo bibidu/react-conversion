@@ -5,6 +5,18 @@ const {
 
 const target = 'vue'
 
+function makeIf(ifs) {
+  let condition = ifs.map(item => replaceMark(item)[1]).join("")
+  if (condition.slice(-2) === '&&') {
+    condition = condition.slice(0, -2)
+  }
+  if (condition.slice(-2) === '||') {
+    condition = condition.slice(0, -2)
+    condition = `!(${condition})`
+  }
+  return condition
+}
+
 module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = []) {
   const block = tabSize.repeat(index)
   let template = ''
@@ -14,16 +26,7 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
     template += `<${jsxTree.tagName}`
   }
   if (jsxTree.if) {
-    
-    let condition = jsxTree.if.map(item => replaceMark(item)[1]).join("")
-    if (condition.slice(-2) === '&&') {
-      condition = condition.slice(0, -2)
-    }
-    if (condition.slice(-2) === '||') {
-      condition = condition.slice(0, -2)
-      condition = `!(${condition})`
-    }
-    template += ` v-if="${condition}"`
+    template += ` v-if="${makeIf(jsxTree.if)}"`
   }
   if (jsxTree.for) {
     parentFor.unshift(jsxTree.for)
@@ -47,6 +50,6 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
 
   if (jsxTree.tagName !== 'text') {
     template += `\n${block}</${jsxTree.tagName}>`
-  }
+  } 
   return template
 }

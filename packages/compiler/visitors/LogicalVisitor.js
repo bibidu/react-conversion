@@ -3,7 +3,7 @@ const {
   ast2code,
   code2ast
 } = require('../compile/utils')
-const { toObject } =  require('../utils')
+const { toObjectDeep } =  require('../utils')
 
 module.exports = function LogicalVisitor(traverse, ast, params) {
   traverse(ast, {
@@ -71,14 +71,70 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
           // 三目 args idx
           if (args.type === 'ConditionalExpression') {
             const nodes = []
+            let methodBody = {}
             deepTraversalConditional(args, nodes)
-            console.log('nodes')
-            console.log(nodes)
+            serilizeTests(nodes, methodBody)
+            const result = ternaryToCreateElement(methodBody)
+            path.node.arguments[idx] = t.identifier(result)
+            // t.callExpression(
+            //   t.identifier("React.ternary"),
+            //   [t.arrayExpression(
+            //     nodes.map(node => {
+            //       return t.objectExpression([
+            //         t.objectProperty(t.stringLiteral('test'), t.arrayExpression(node.test.map(test => t.stringLiteral(test)))),
+            //         t.objectProperty(t.stringLiteral('value'), t.identifier(node.value)),
+            //         t.objectProperty(t.stringLiteral('type'), t.stringLiteral(node.type)),
+            //       ])
+            //     })
+            //   )]
+            // )
           }
         })
       }
     }
   })
+}
+
+function ternaryToCreateElement(tree){
+  let str = ''
+  if (tree['@@isElement__']) {
+    return tree.value
+  }
+  Object.keys(tree).forEach(k => {
+    if (tree[k]['@@isElement__']) {
+      str += `React.createElement("template", { if: \`@@ternary__${k}\` }, ${tree[k].value}),\n`
+    } else {
+      const value = ternaryToCreateElement(tree[k])
+      str += `React.createElement("template", { if: \`@@ternary__${k}\` }, ${value})`
+    }
+  })
+  return str
+}
+function serilizeTests(nodes, methodBody) {
+    let cache = []
+    nodes.forEach(node => {
+      node.test.forEach(t => {
+        cache.push(t)
+        _deepPathSetValue(methodBody, cache)
+      })
+      _deepPathSetValue(methodBody, cache, {
+        '@@isElement__': true,
+        type: node.type,
+        value: node.value
+      })
+      cache = []
+    })
+    function _deepPathSetValue(obj, paths, value) {
+      return paths.reduce((obj, curr, index) => {
+        if (typeof obj[curr] !== 'object') {
+          obj[curr] = {}
+        }
+        if (value !== undefined && index === paths.length - 1) {
+          obj[curr] = value
+        }
+        return obj[curr]
+      }, obj)
+    }
 }
 // "`@@condition__"   "`"
 function deepTraversalConditional(current, nodes, tests = []) {
@@ -91,7 +147,7 @@ function deepTraversalConditional(current, nodes, tests = []) {
       deepTraversalConditional(current.consequent, nodes, tests.concat(test))
     } else {
       nodes.push({
-        test: tests.concat(test), value: ast2code(current.consequent)
+        test: tests.concat(test), value: ast2code(current.consequent), type: isCreateElement(current.consequent) ? 'element' : 'not-element'
       })
     }
   }
@@ -100,7 +156,7 @@ function deepTraversalConditional(current, nodes, tests = []) {
       deepTraversalConditional(current.alternate, nodes, tests.concat(`!${test}`))
     } else {
       nodes.push({
-        test: tests.concat(`!${test}`), value: ast2code(current.alternate)
+        test: tests.concat(`!${test}`), value: ast2code(current.alternate), type: isCreateElement(current.consequent) ? 'element' : 'not-element'
       })
     }
   }
@@ -138,6 +194,9 @@ function deepTraversalLogical(current, nodes) {
 }
 
 function isCreateElement(node) {
+  if (node === null) {
+    return true
+  }
   if (
     node.type === 'CallExpression'
     && node.callee.object

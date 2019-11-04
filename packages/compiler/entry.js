@@ -34,7 +34,6 @@ const mock = true
 
 const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
 let ctx = createPropCtx(params.props)
-console.log(renderString)
 const f = fn(`var React = ${toObject(React)};return ${renderString}`)
 const jsxTree = f().call(ctx)
 // fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')

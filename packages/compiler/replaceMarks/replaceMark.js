@@ -25,5 +25,9 @@ module.exports = function replaceMark (str, parentFor) {
   if (str.startsWith(mark = '@@logic__')) {
     return ["", str.split(mark)[1]]
   }
+  //  三目
+  if (str.startsWith(mark = '@@ternary__')) {
+    return ["v-", `"` + str.split(mark)[1] + `"`]
+  }
   return ["", str]
 }
