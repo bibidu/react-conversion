@@ -1,7 +1,7 @@
 module.exports = function replaceMark (str, parentFor) {
   let mark 
-  console.log('str')
-  console.log(str)
+  // console.log('str')
+  // console.log(str)
   // 裸字符
   if (str.startsWith(mark = '@@string__')) {
     return ["", `{{${str.split(mark)[1]}}}`]
@@ -30,6 +30,10 @@ module.exports = function replaceMark (str, parentFor) {
   //  三目
   if (str.startsWith(mark = '@@ternary__')) {
     return ["v-", `"` + str.split(mark)[1] + `"`]
+  }
+  // v-else
+  if (str === '@@else__') {
+    return ["v-", ""]
   }
   return ["", str]
 }

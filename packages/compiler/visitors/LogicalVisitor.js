@@ -96,16 +96,19 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
 }
 
 function ternaryToCreateElement(tree){
+  console.log('tree')
+  console.log(tree)
   let str = ''
   if (tree['@@isElement__']) {
     return tree.value
   }
-  Object.keys(tree).forEach(k => {
+  Object.keys(tree).forEach((k, idx) => {
+    const ifElse = idx === 0 ? `if: \`@@ternary__${k}\`` : `else: '@@else__'`
     if (tree[k]['@@isElement__']) {
-      str += `React.createElement("template", { if: \`@@ternary__${k}\` }, ${tree[k].value}),\n`
+      str += `React.createElement("template", { ${ifElse} }, ${tree[k].value}),\n`
     } else {
       const value = ternaryToCreateElement(tree[k])
-      str += `React.createElement("template", { if: \`@@ternary__${k}\` }, ${value})`
+      str += `React.createElement("template", { ${ifElse} }, ${value})`
     }
   })
   return str

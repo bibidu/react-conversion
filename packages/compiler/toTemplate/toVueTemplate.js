@@ -35,7 +35,8 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
   }
   Object.entries(jsxTree.attrs || {}).forEach(([key, value]) => {
     const [attrPrefix, replacedValue] = replaceMark(value, parentFor)
-    template += ` ${attrPrefix}${replaceKey(key)}=${replacedValue}`
+    const operator = replacedValue ? '=' : ''
+    template += ` ${attrPrefix}${replaceKey(key)}${operator}${replacedValue}`
   })
   if (jsxTree.tagName !== 'text') {
     template += `>`;
