@@ -51,6 +51,11 @@ const visitor = (traverse, ast, params) => {
             }
           }
         }
+        // 标记字符串
+        if (['Identifier', 'BinaryExpression'].includes(chlidrenElement.type)) {
+          // console.log('BinaryExpressionBinaryExpressionBinaryExpression')
+          path.node.arguments[2] = t.identifier("`@@string__" + ast2code(path.node.arguments[2]) + "`")
+        }
       }
     },
     LogicalExpression() {
@@ -65,6 +70,20 @@ const visitor = (traverse, ast, params) => {
     //   path.replaceWith(t.identifier("`@@string__" + code + "`"))
     // }
   })
+}
+function isCreateElement(node) {
+  if (node === null) {
+    return true
+  }
+  if (
+    node.type === 'CallExpression'
+    && node.callee.object
+    && node.callee.object.name === 'React'
+    && node.callee.property.name === 'createElement'
+  ) {
+    return true
+  }
+  return false
 }
 
 const LogicalVisitor = require('./LogicalVisitor')

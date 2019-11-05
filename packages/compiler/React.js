@@ -6,6 +6,8 @@ const React = {
     }
   },
   createElement: function(tagNameOrComponentName, attrs, ...children) {
+    // console.log('createElementcreateElementcreateElementcreateElementcreateElementcreateElementcreateElementcreateElement')
+    // console.log(JSON.stringify(children, null, 2))
     const tree = {}
     tree.children = []
     tree.tagName = tagNameOrComponentName

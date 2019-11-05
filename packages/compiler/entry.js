@@ -33,6 +33,8 @@ const target = 'vue'
 const mock = true
 
 const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
+console.log('renderStringrenderStringrenderString')
+console.log(renderString)
 let ctx = createPropCtx(params.props)
 const f = fn(`var React = ${toObject(React)};return ${renderString}`)
 const jsxTree = f().call(ctx)
