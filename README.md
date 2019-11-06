@@ -194,7 +194,11 @@ function render() {
 
 
 # 目前的问题
-- [ ] rollup打包@babel/types存在循环引用的问题、打包速度过慢
+- [x] rollup打包@babel/types存在循环引用的问题、打包速度过慢
+babel/core、types、generate等包时本身体积过大，将ES6引入、暴露方式改为commonjs规范的引入、暴露
+
+- [x] v-for="(friend) in item.friends" 写法不合法
+改为v-for="(friend,_) in item.friends" 或 v-for="friend in item.friends"
 
 - [ ] vue的jsx写法如何支持嵌套:
 

@@ -31,7 +31,8 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
   if (jsxTree.for) {
     parentFor.unshift(jsxTree.for)
     const { list, item, index } = jsxTree.for
-    template += ` v-for="(${item}${index ? ', ' + index : ''}) in ${list}"`
+    const iteratorItem = index ? `(${item},${index})` : item
+    template += ` v-for="${iteratorItem} in ${list}"`
   }
   Object.entries(jsxTree.attrs || {}).forEach(([key, value]) => {
     const [attrPrefix, replacedValue] = replaceMark(value, parentFor)
