@@ -1,11 +1,11 @@
-import { default as generate } from '@babel/generator'
-import * as parser from '@babel/parser'
+const generate = require('@babel/generator').default
+const parser = require('@babel/parser')
 
-export function ast2code(ast) {
+module.exports.ast2code = function ast2code(ast) {
   const code = generate(ast, {}).code
   return code
 }
-export function code2ast(code) {
+module.exports.code2ast = function code2ast(code) {
   console.log('code')
   console.log(code)
   const ast = parser.parse(code)

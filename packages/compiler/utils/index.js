@@ -1,35 +1,32 @@
-export function createInstance(Clazz, props) {
+module.exports.createInstance = function createInstance(Clazz, props) {
   return new Clazz(props)
 }
 
-export function getRenderString(instance) {
+module.exports.getRenderString = function getRenderString(instance) {
   return instance.render.toString()
 }
 
-export function bindCtx(instance) {
+module.exports.bindCtx = function bindCtx(instance) {
   const ctx = {}
   Object.keys(instance).forEach(key => ctx[key] = instance[key])
   return ctx
 }
 
-export function extractUsePrefix(string) {
+module.exports.extractUsePrefix = function extractUsePrefix(string) {
   const lastDotIndex = string.lastIndexOf('.')
   return [string.slice(0, lastDotIndex), string.slice(lastDotIndex + 1)]
 }
 
-export function markTernary() {
+// module.exports = function markTernary() {
   
-}
+// }
 
-export function jsxCompile(componentText) {
 
-}
-
-export function fn(text) {
+module.exports.fn = function fn(text) {
   return new Function(text)
 }
 
-export function toObject(obj){
+module.exports.toObject = function toObject(obj){
 	let i = '{'
 	Object.keys(obj).forEach(item =>{
     if (typeof obj[item] === 'function') {
@@ -42,7 +39,7 @@ export function toObject(obj){
   return i;
 }
 
-export function toObjectDeep(obj){
+module.exports.toObjectDeep = function toObjectDeep(obj){
 	let i = '{'
 	Object.keys(obj).forEach(item =>{
     if (typeof obj[item] === 'function') {
@@ -57,7 +54,7 @@ export function toObjectDeep(obj){
   return i;
 }
 
-export function safeGet(source, expression, def = undefined) {
+module.exports.safeGet = function safeGet(source, expression, def = undefined) {
   if (typeof source !== 'object' || !expression.includes('.')) {
     return def
   }
@@ -68,7 +65,7 @@ export function safeGet(source, expression, def = undefined) {
   }, source)
  }
 
- export function getTypeDefault(type) {
+ module.exports.getTypeDefault = function getTypeDefault(type) {
   const typeDefault = {
     string: '',
     Array: [1]

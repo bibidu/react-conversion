@@ -1,4 +1,6 @@
-export default function mainVisitor(traverse, ast, params) {
+const t = require('@babel/types')
+const { ast2code } = require('../compile/utils')
+module.exports = function mainVisitor(traverse, ast, params) {
   traverse(ast, {
     Program(path) {
       Array.from(path.node.body).forEach(child => {
@@ -56,7 +58,7 @@ export default function mainVisitor(traverse, ast, params) {
       }
     },
     LogicalExpression() {
-      console.log('LogicalExpression ===============');
+      // console.log('LogicalExpression ===============');
     },
     ConditionalExpression(path) {
       const code = ast2code(path.node)

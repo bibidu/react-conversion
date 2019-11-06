@@ -1,19 +1,11 @@
-// import fs from 'fs'
-import React from './React'
-import {
+const React = require('./React')
+const {
   componentString,
   mockRenderString,
-} from './mock'
-import toTemplate from './toTemplate'
-import jsxCompile from './compile'
+} = require('./mock')
+const toTemplate = require('./toTemplate')
+const jsxCompile = require('./compile')
 const {
-  createInstance,
-  getRenderString,
-  bindCtx,
-  replaceAttr,
-  extractUsePrefix,
-  markTernary,
-  parseFunctionMark,
   fn,
   toObject,
   getTypeDefault

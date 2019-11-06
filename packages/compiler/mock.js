@@ -1,6 +1,6 @@
 const React = require('./React')
 
-export const componentString = `
+module.exports.componentString = `
 class Button extends React.Component{
   render() {
     return (
@@ -58,7 +58,7 @@ Button.propTypes = {
   msg: 'string',
   list: 'Array'
 };`
-export const mockRenderString = `function render() {
+module.exports.mockRenderString = `function render() {
   var msg = this.props.msg;
   return React.createElement("div", null, React.createElement("button", {
     onClick: \`@@ctxString__this.show\`

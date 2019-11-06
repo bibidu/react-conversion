@@ -1,3 +1,3 @@
-export default function afterCompileMake(renderString) {
+module.exports = function afterCompileMake(renderString) {
   return renderString
 }

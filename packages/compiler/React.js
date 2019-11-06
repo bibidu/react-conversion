@@ -1,5 +1,4 @@
-
-const React = {
+module.exports = React = {
 	Component: class {
     constructor(p){
       this.props = p || {}
@@ -58,5 +57,3 @@ const React = {
   ternary(params) {
   }
 }
-
-export default React

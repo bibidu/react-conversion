@@ -1,7 +1,4 @@
-// const { extractUsePrefix } = require('../utils')
-// const replaceMark = require('./replaceMark')
-
-export default function replaceKey (key) {
+module.exports = function replaceKey (key) {
   const eventName = {
     onClick: '@click'
   }

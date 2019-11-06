@@ -1,11 +1,11 @@
-import t from '@babel/types'
-import { 
+const t = require('@babel/types')
+const { 
   ast2code,
   code2ast
-} from '../compile/utils'
-import { toObjectDeep } from '../utils'
+} = require('../compile/utils')
+const { toObjectDeep } = require('../utils')
 
-export default function LogicalVisitor(traverse, ast, params) {
+module.exports = function LogicalVisitor(traverse, ast, params) {
   traverse(ast, {
     CallExpression(path) {
       if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {

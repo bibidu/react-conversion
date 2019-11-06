@@ -1,6 +1,2 @@
-import replaceMark from './replaceMark'
-import replaceKey from './replaceKey'
-export {
-  replaceMark,
-  replaceKey
-}
+module.exports.replaceMark = require('./replaceMark')
+module.exports.replaceKey = require('./replaceKey')
