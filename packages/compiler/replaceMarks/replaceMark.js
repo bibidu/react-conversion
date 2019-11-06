@@ -1,7 +1,7 @@
 module.exports = function replaceMark (str, parentFor) {
   let mark 
-  // console.log('str')
-  // console.log(str)
+  console.log('str')
+  console.log(str)
   // 裸字符
   if (str.startsWith(mark = '@@string__')) {
     return ["", `{{${str.split(mark)[1]}}}`]
@@ -15,7 +15,8 @@ module.exports = function replaceMark (str, parentFor) {
       const value = str.split(mark)[1]
       let i = -1
       while (++i < parentFor.length) {
-        if (Object.values(parentFor[i]).includes(value)) {
+        const valueRoot = value.split('.')[0]
+        if (Object.values(parentFor[i]).includes(valueRoot)) {
           return [":", `"${value}"`]
         }
       }

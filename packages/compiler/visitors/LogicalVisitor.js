@@ -68,8 +68,9 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
               identifiers
             )
           }
-          // 三目 args idx
+            // 三目 args idx
           if (args.type === 'ConditionalExpression') {
+            console.log('ConditionalExpression')
             const nodes = []
             let methodBody = {}
             deepTraversalConditional(args, nodes)
@@ -96,8 +97,6 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
 }
 
 function ternaryToCreateElement(tree){
-  console.log('tree')
-  console.log(tree)
   let str = ''
   if (tree['@@isElement__']) {
     return tree.value

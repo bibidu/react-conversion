@@ -6,9 +6,15 @@ class Button extends React.Component{
     return (
       <div id="container">
         {
-          [1, 2].map((item, idx) => (
-            <h1>
-              <button key={idx}>{item}</button>
+          list.map((item, idx) => (
+            <h1 key={idx}>
+              {
+                item.friends.map(friend => (
+                  <button key={friend.id}>
+                    {friend}
+                  </button>
+                ))
+              }
             </h1>
           ))
         }
