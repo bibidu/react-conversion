@@ -72,3 +72,42 @@ module.exports.safeGet = function safeGet(source, expression, def = undefined) {
   }
   return typeDefault[type]
 }
+
+module.exports.genPreviewHtml = function genPreviewHtml(element, vueInstance) {
+  const html = `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      ${element}
+    </div>
+  
+    <script>
+      ${vueInstance}
+    </script>
+  </body>
+  </html>`
+  require('fs').writeFileSync('./index.html', html, 'utf8')
+}
+
+module.exports.genVueInstance = function genVueInstance(params) {
+  const props = params.props
+  const template = (data) => `new Vue({
+    el: '#app',
+    data: ${data}
+  })`
+  let str = '{'
+  console.log(props)
+  Object.entries(props).forEach(([key, value]) => {
+    console.log(value)
+    str += `${key}: ${JSON.stringify(value.default, null, 2)},`
+  })
+  str += '}'
+  return template(str)
+}

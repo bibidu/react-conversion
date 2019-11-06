@@ -1,5 +1,24 @@
 const React = require('./React')
 
+module.exports.componentJson = {
+  props: {
+    list: {
+      type: 'array',
+      default: [
+        { id: 1, friends: ['Alice', 'John'] },
+        { id: 2, friends: ['Tom', 'bibidu'] }
+      ]
+    },
+    show: {
+      type: 'boolean',
+      default: true
+    },
+    visiable: {
+      type: 'boolean',
+      default: true
+    }
+  }
+}
 module.exports.componentString = `
 class Button extends React.Component{
   render() {
@@ -31,7 +50,8 @@ class Button extends React.Component{
       </div>
     )
   }
-}`
+}
+`
 // show ? <h1>123</h1> : <h1>456</h1>
 const componentString1 = `
 
