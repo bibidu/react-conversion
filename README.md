@@ -194,6 +194,8 @@ function render() {
 
 
 # 目前的问题
+- [ ] rollup打包@babel/types存在循环引用的问题、打包速度过慢
+
 - [ ] vue的jsx写法如何支持嵌套:
 
 ```js
@@ -213,6 +215,7 @@ h(Text, {
 
 - [x] 舍弃方案
 react -> jsx method -> runtime modify -> universal js tree -> vue/...
+
 原因: runtime modify -> universal js tree时部分语法实现过于复杂
 ```js
 {
@@ -234,4 +237,5 @@ render() {
 ```
 
 解决方案：react -> jsx method -> jsx modify -> universal jsx -> vue/...
+
 弊端：生成代码为`通用jsx`, 对于不支持jsx语法的端如何转化仍未解决

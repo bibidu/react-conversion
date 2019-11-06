@@ -1,7 +1,7 @@
-const {
+import {
   replaceMark,
   replaceKey
-} = require('../replaceMarks')
+} from '../replaceMarks'
 
 const target = 'vue'
 
@@ -17,7 +17,7 @@ function makeIf(ifs) {
   return condition
 }
 
-module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = []) {
+export default function toVueTemplate(tabSize, jsxTree, index, parentFor = []) {
   const block = tabSize.repeat(index)
   let template = ''
   if (jsxTree.tagName === 'text') {

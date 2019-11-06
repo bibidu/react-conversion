@@ -1,31 +1,35 @@
-
-function createInstance(Clazz, props) {
+export function createInstance(Clazz, props) {
   return new Clazz(props)
 }
-function getRenderString(instance) {
+
+export function getRenderString(instance) {
   return instance.render.toString()
 }
-function bindCtx(instance) {
+
+export function bindCtx(instance) {
   const ctx = {}
   Object.keys(instance).forEach(key => ctx[key] = instance[key])
   return ctx
 }
-function extractUsePrefix(string) {
+
+export function extractUsePrefix(string) {
   const lastDotIndex = string.lastIndexOf('.')
   return [string.slice(0, lastDotIndex), string.slice(lastDotIndex + 1)]
 }
 
-function markTernary() {
+export function markTernary() {
   
 }
 
-function jsxCompile(componentText) {
+export function jsxCompile(componentText) {
 
 }
-function fn(text) {
+
+export function fn(text) {
   return new Function(text)
 }
-function toObject(obj){
+
+export function toObject(obj){
 	let i = '{'
 	Object.keys(obj).forEach(item =>{
     if (typeof obj[item] === 'function') {
@@ -37,7 +41,8 @@ function toObject(obj){
 	i += '}'
   return i;
 }
-function toObjectDeep(obj){
+
+export function toObjectDeep(obj){
 	let i = '{'
 	Object.keys(obj).forEach(item =>{
     if (typeof obj[item] === 'function') {
@@ -51,10 +56,10 @@ function toObjectDeep(obj){
 	i += '}'
   return i;
 }
-function safeGet(source, expression, def = undefined) {
+
+export function safeGet(source, expression, def = undefined) {
   if (typeof source !== 'object' || !expression.includes('.')) {
     return def
-    // return source
   }
   const splitExpArr = expression.split('.').slice(1)
   return splitExpArr.reduce((prev, curr) => {
@@ -62,24 +67,11 @@ function safeGet(source, expression, def = undefined) {
     return prev[curr] || def
   }, source)
  }
-function getTypeDefault(type) {
+
+ export function getTypeDefault(type) {
   const typeDefault = {
     string: '',
     Array: [1]
   }
   return typeDefault[type]
-}
-
-module.exports = {
-  createInstance,
-  getRenderString,
-  bindCtx,
-  extractUsePrefix,
-  markTernary,
-  jsxCompile,
-  fn,
-  toObject,
-  toObjectDeep,
-  safeGet,
-  getTypeDefault
 }

@@ -1,5 +1,3 @@
-module.exports = function afterCompileMake(renderString) {
-  // console.log('renderString')
-  // console.log(renderString)
+export default function afterCompileMake(renderString) {
   return renderString
 }

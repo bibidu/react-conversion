@@ -1,4 +1,4 @@
-module.exports = function replaceMark (str, parentFor) {
+export default function replaceMark (str, parentFor) {
   let mark 
   // console.log('str')
   // console.log(str)

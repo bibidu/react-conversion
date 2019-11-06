@@ -1,11 +1,11 @@
-const fs = require('fs')
-const {
+// import fs from 'fs'
+import React from './React'
+import {
   componentString,
   mockRenderString,
-} = require('./mock.js')
-const React = require('./React')
-const toTemplate = require('./toTemplate')
-const jsxCompile = require('../compiler/compile')
+} from './mock'
+import toTemplate from './toTemplate'
+import jsxCompile from './compile'
 const {
   createInstance,
   getRenderString,

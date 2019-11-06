@@ -1,12 +1,21 @@
-const babel = require("@babel/core")
-const traverse = require('@babel/traverse').default
-const parser = require('@babel/parser')
-const React = require('../React')
-const { toObject } = require('../utils')
-const generate = require('@babel/generator').default
+import babel from '@babel/core'
+import { default as traverse } from '@babel/traverse'
+import { default as generate } from '@babel/generator'
+import * as parser from '@babel/parser'
+import React from '../React'
+import visitors from '../visitors'
+import afterCompileMake from './afterCompileMake'
+import { toObject } from '../utils'
 
-const visitors = require('../visitors')
-const afterCompileMake = require('./afterCompileMake')
+// const babel = require("@babel/core")
+// const traverse = require('@babel/traverse').default
+// const parser = require('@babel/parser')
+// const React = require('../React')
+// const { toObject } = require('../utils')
+// const generate = require('@babel/generator').default
+
+// const visitors = require('../visitors')
+// const afterCompileMake = require('./afterCompileMake')
 
 
 
@@ -46,4 +55,4 @@ function compile(code) {
     }
   }
 }
-module.exports = compile
+export default compile
