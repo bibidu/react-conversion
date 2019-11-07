@@ -29,6 +29,9 @@ const mappings = {
 }
 
 function mappingFn(jsxTree) {
+  if (!jsxTree.tagName) {
+    return
+  }
   let fn
   if (!(fn = mappings[jsxTree.tagName])) {
     const error = `暂不支持转义标签: "${jsxTree.tagName}"！！！`

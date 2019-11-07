@@ -15,7 +15,6 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
             const nodes = []
             // 深度优先遍历
             deepTraversalLogical(args, nodes)
-
             let lastIdx = 0, logics = []
             nodes.reduce((prev, curr, index) => {
               
@@ -152,20 +151,20 @@ function deepTraversalLogical(current, nodes) {
   } else {
     nodes.push({
       type: isCreateElement(current) ? 'createElement' : 'string',
-      value: ast2code(current)
+      value: ast2code(current) + ' '
     })
     return 
   }
   nodes.push({
     type: 'operator',
-    value: current.operator
+    value: current.operator + ' '
   })
   if (current.right) {
     deepTraversalLogical(current.right, nodes)
   } else {
     nodes.push({
       type: isCreateElement(current) ? 'createElement' : 'string',
-      value: isCreateElement(current) ? JSON.stringify(ast2code(current.operator)) : ast2code(current.operator)
+      value: isCreateElement(current) ? JSON.stringify(ast2code(current.operator)) + ' ' : ast2code(current.operator) + ' '
     })
   }
 }

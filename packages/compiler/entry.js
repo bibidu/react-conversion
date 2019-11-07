@@ -31,9 +31,7 @@ const { renderString, params } = jsxCompile(target, componentString) || ''
 let ctx = createPropCtx(componentJson)
 const f = fn(`var React = ${toObject(getReactEnvironment(target))};return ${renderString}`)
 const jsxTree = f().call(ctx)
-// require('fs').writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
-// console.log('jsxTree');
-// console.log(jsxTree);
+// require('fs').writeFileSync('./1.json', JSON.stringify(jsxTree, null, 2), 'utf8')
 const html = toTemplate(target, jsxTree)
 // console.log('vueHtml');
 // console.log('========== 编译结果 ===========')

@@ -18,12 +18,12 @@ module.exports = function toRNTemplate(tabSize, jsxTree, index, parentFor = []) 
 
 const tabSize = 2
 const block = (tab) => '  '.repeat(tab)
+
 function genRnCode(jsxTree, tab = 0) {
   let str = ''
   const {
-    tagName, attrs, for: fors, children
+    tagName, attrs, for: fors, if: ifs, value, children
   } = jsxTree
-
 
   if (fors) {
     const { list, item, index } = fors
@@ -32,7 +32,18 @@ function genRnCode(jsxTree, tab = 0) {
     str += `${list}.map(${mapParam} => (\n`
   }
 
-  str += `${block(++tab)}<${tagName}`
+
+  if (ifs && ifs.length) {
+    str += ifs.reduce((prev, curr) => {
+      return prev + rnReplaceMark(curr)[1]
+    }, `${block(tab)}{`)
+    str += '('
+  } else {
+    str += `${block(tab)}`
+  }
+
+  str += `<${tagName}`
+
 
   Object.entries(attrs || {}).forEach(([key, value]) => {
     const [ prefix, removeMarkValue ] = rnReplaceMark(value)
@@ -40,15 +51,21 @@ function genRnCode(jsxTree, tab = 0) {
   })
   str += `>\n`
 
+  if (tagName === 'Text') {
+    const [ prefix, removeMarkValue ] = rnReplaceMark(value)
+    str += `${block(tab + 1)}${removeMarkValue}`
+  }
 
-  children.forEach(child => str += genRnCode(child, ++tab))
+  children.forEach(child => str += genRnCode(child, tab + 1))
 
-  str += `\n${block((tab))}</${tagName}>`
+  str += `\n${block(tab)}</${tagName}>`
 
+  if (ifs && ifs.length) {
+    str += ')}'
+  }
 
   if (fors) {
-    str += `\n${block((tab))})`
-    str += `${block((tab))}}`
+    str += `\n${block((tab))})}\n`
   }
 
   return str

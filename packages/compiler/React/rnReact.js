@@ -7,7 +7,11 @@ module.exports = rnReact = {
     tree.tagName = tagNameOrComponentName
     tree.attrs = attrs
     tree.children = []
-    children.forEach(child => {
+    children.forEach((child, idx) => {
+      if (idx === children.length - 1) {
+        console.log('last==================')
+        console.log(child)
+      }
       if (typeof child === 'string') {
         tree.children.push({
           tagName: 'text',
@@ -52,9 +56,20 @@ module.exports = rnReact = {
       }
     }
   },
-  constant(elment, after) {
+  constant(element, after) {
+    return {
+      type: 'ternary',
+      value: `${element} ${after} `,
+      children: []
+    }
   },
   logicWrapper(...args) {
-    
+    const obj = args.reverse().reduce((prev, curr) => {
+      curr.next = prev
+      return curr
+    })
+    return obj
+    console.log('obj')
+    console.log(obj)
   }
 }

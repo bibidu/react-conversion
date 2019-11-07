@@ -44,8 +44,13 @@ module.exports = function mainVisitor(traverse, ast, params) {
         }
         // 标记字符串
         if (['Identifier', 'BinaryExpression'].includes(chlidrenElement.type)) {
-          // console.log('BinaryExpressionBinaryExpressionBinaryExpression')
-          path.node.arguments[2] = t.identifier("`@@string__" + ast2code(path.node.arguments[2]) + "`")
+          let code = ast2code(path.node.arguments[2])
+            if (code.startsWith('"') &&  code.endsWith('"')) {
+              code = t.identifier("`@@string__" + code + "`")
+            } else {
+              code = t.identifier("`@@stringDynatic__" + code + "`")
+            }
+            path.node.arguments[2] = code
         }
       }
     },

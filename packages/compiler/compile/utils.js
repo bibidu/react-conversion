@@ -6,8 +6,6 @@ module.exports.ast2code = function ast2code(ast) {
   return code
 }
 module.exports.code2ast = function code2ast(code) {
-  console.log('code')
-  console.log(code)
   const ast = parser.parse(code)
   return ast
 }
