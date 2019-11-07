@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="app">
-      <div id="container">
+      <div id="container" @click="() => alert(1)">
   <h1 v-for="(item,idx) in list" :key="idx">
     <button v-for="friend in item.friends" :key="friend.id">{{friend}}</button>
   </h1>

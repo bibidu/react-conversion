@@ -29,14 +29,15 @@ const mock = true
 const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
 let ctx = createPropCtx(params.props)
 const f = fn(`var React = ${toObject(React)};return ${renderString}`)
-console.log(f.toString())
+// console.log(f.toString())
 const jsxTree = f().call()
 // fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
 const vueHtml = toTemplate(target, jsxTree)
 // console.log('vueHtml');
 console.log('========== 编译结果 ===========')
 console.log(vueHtml);
-genPreviewHtml(vueHtml, genVueInstance(componentJson))
+const html = genPreviewHtml(vueHtml, genVueInstance(componentJson))
  
+console.log(html);
  
 

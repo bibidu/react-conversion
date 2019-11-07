@@ -8,7 +8,7 @@ module.exports = function replaceMark (str, parentFor) {
   }
   // react中attr对象的values
   if (str.startsWith(mark = '@@attrValue__')) {
-    if (str.includes('this')) {
+    if (str.startsWith('this')) {
       const restStr = str.split(mark)[1]
       return ["", `"${restStr.split('this.')[1]}"`]
     } else {
@@ -20,8 +20,8 @@ module.exports = function replaceMark (str, parentFor) {
           return [":", `"${value}"`]
         }
       }
-      
-      return ["", value]
+      const hasQuot = value.startsWith('"') && value.endsWith('"')
+      return ["", hasQuot ? value : `"${value}"`]
     }
   }
   // && ||

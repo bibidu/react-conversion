@@ -94,6 +94,7 @@ module.exports.genPreviewHtml = function genPreviewHtml(element, vueInstance) {
   </body>
   </html>`
   require('fs').writeFileSync('./index.html', html, 'utf8')
+  return html
 }
 
 module.exports.genVueInstance = function genVueInstance(params) {
@@ -105,9 +106,9 @@ module.exports.genVueInstance = function genVueInstance(params) {
   let str = '{'
   console.log(props)
   Object.entries(props).forEach(([key, value]) => {
-    console.log(value)
     str += `${key}: ${JSON.stringify(value.default, null, 2)},`
   })
   str += '}'
+  console.log(str);
   return template(str)
 }

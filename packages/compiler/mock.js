@@ -23,7 +23,7 @@ module.exports.componentString = `
 class Button extends React.Component{
   render() {
     return (
-      <div id="container">
+      <div id="container" onClick={() => alert(1)}>
         {
           list.map((item, idx) => (
             <h1 key={idx}>
