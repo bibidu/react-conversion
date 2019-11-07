@@ -9,15 +9,14 @@
   "dependencies": {
     "@babel/core": "^7.6.4",
     "@babel/generator": "^7.6.4",
-    "@babel/preset-react": "^7.6.3",
-    "@babel/types": "^7.6.3",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/traverse": "^7.6.3"
+    "@babel/preset-react": "^7.7.0",
+    "@babel/traverse": "^7.6.3",
+    "@babel/types": "^7.6.3"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

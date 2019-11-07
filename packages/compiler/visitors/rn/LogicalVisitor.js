@@ -74,20 +74,6 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
             deepTraversalConditional(args, nodes)
             const str = markWrapper(nodes)
             path.node.arguments[idx] = t.identifier(str)
-            // serilizeTests(nodes, methodBody)
-            // const result = ternaryToCreateElement(methodBody)
-            // t.callExpression(
-            //   t.identifier("React.ternary"),
-            //   [t.arrayExpression(
-            //     nodes.map(node => {
-            //       return t.objectExpression([
-            //         t.objectProperty(t.stringLiteral('test'), t.arrayExpression(node.test.map(test => t.stringLiteral(test)))),
-            //         t.objectProperty(t.stringLiteral('value'), t.identifier(node.value)),
-            //         t.objectProperty(t.stringLiteral('type'), t.stringLiteral(node.type)),
-            //       ])
-            //     })
-            //   )]
-            // )
           }
         })
       }
@@ -95,9 +81,12 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
   })
 }
 function markWrapper(nodes) {
+  console.log('nodes')
+  console.log(nodes)
   let str = 'React.logicWrapper('
   nodes.forEach(node => {
-    const element = node.isElement ? node.value : `React.constant(${node.value}, "${node.after}")`
+    const element = node.isElement ?
+      `React.merge(${node.value}, {after: "${node.after}"})` : `React.constant(\`@@constant__${node.value}\`, "${node.after}", "${node.type}")`
     str += `${element},\n`
   })
   str += ')'
@@ -105,13 +94,12 @@ function markWrapper(nodes) {
 }
 // "`@@condition__"   "`"
 function deepTraversalConditional(current, nodes) {
-  // let test
   if (current.test) {
-    // test =  ast2code(current.test)
     nodes.push({
-        isElement: isCreateElement(current.test),
-        value: ast2code(current.test),
-      after: '?'
+      isElement: isCreateElement(current.test),
+      value: ast2code(current.test),
+      type: 'test',
+      after: ' ?'
     })
   }
   if (current.consequent) {
@@ -121,7 +109,8 @@ function deepTraversalConditional(current, nodes) {
       nodes.push({
         isElement: isCreateElement(current.consequent),
         value: ast2code(current.consequent),
-        after: ':'
+        type: 'consequent',
+        after: ' :'
       })
     }
   }
@@ -132,6 +121,7 @@ function deepTraversalConditional(current, nodes) {
       nodes.push({
         isElement: isCreateElement(current.alternate),
         value: ast2code(current.alternate),
+        type: 'alternate',
         after: ''
       })
     }
@@ -151,20 +141,20 @@ function deepTraversalLogical(current, nodes) {
   } else {
     nodes.push({
       type: isCreateElement(current) ? 'createElement' : 'string',
-      value: ast2code(current) + ' '
+      value: ast2code(current)
     })
     return 
   }
   nodes.push({
     type: 'operator',
-    value: current.operator + ' '
+    value: current.operator
   })
   if (current.right) {
     deepTraversalLogical(current.right, nodes)
   } else {
     nodes.push({
       type: isCreateElement(current) ? 'createElement' : 'string',
-      value: isCreateElement(current) ? JSON.stringify(ast2code(current.operator)) + ' ' : ast2code(current.operator) + ' '
+      value: isCreateElement(current) ? JSON.stringify(ast2code(current.operator)) : ast2code(current.operator)
     })
   }
 }

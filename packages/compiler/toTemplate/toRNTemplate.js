@@ -5,6 +5,7 @@ const {
 
 module.exports = function toRNTemplate(tabSize, jsxTree, index, parentFor = []) {
   console.log('toRNTemplate')
+  console.log(jsxTree)
   // 替换标签
   tagNameMappingFn(jsxTree)
   // require('fs').writeFileSync('./2.json', JSON.stringify(jsxTree, null, 2), 'utf8')
@@ -22,8 +23,18 @@ const block = (tab) => '  '.repeat(tab)
 function genRnCode(jsxTree, tab = 0) {
   let str = ''
   const {
-    tagName, attrs, for: fors, if: ifs, value, children
+    type, tagName, attrs, for: fors, if: ifs, value, next, before, after, children
   } = jsxTree
+
+  if (type === 'ternary') {
+    if (before) {
+      str += `${block(tab)}${before}`
+    } else {
+      str += `${block(tab)}`
+    }
+    str += rnReplaceMark(value)[1]
+    str += after
+  }
 
   if (fors) {
     const { list, item, index } = fors
@@ -42,14 +53,17 @@ function genRnCode(jsxTree, tab = 0) {
     str += `${block(tab)}`
   }
 
-  str += `<${tagName}`
-
+  if (tagName) {
+    str += `<${tagName}`
+  }
 
   Object.entries(attrs || {}).forEach(([key, value]) => {
     const [ prefix, removeMarkValue ] = rnReplaceMark(value)
     str += ` ${key}=${removeMarkValue}`
   })
-  str += `>\n`
+  if (tagName) {
+    str += `>\n`
+  }
 
   if (tagName === 'Text') {
     const [ prefix, removeMarkValue ] = rnReplaceMark(value)
@@ -58,14 +72,23 @@ function genRnCode(jsxTree, tab = 0) {
 
   children.forEach(child => str += genRnCode(child, tab + 1))
 
-  str += `\n${block(tab)}</${tagName}>`
+  if (tagName) { 
+    str += `\n${block(tab)}</${tagName}>`
+    if (after) {
+      str += after
+    }
+  }
 
   if (ifs && ifs.length) {
-    str += ')}'
+    str += ')}\n'
   }
 
   if (fors) {
     str += `\n${block((tab))})}\n`
+  }
+
+  if (next) {
+    str += genRnCode(next, tab)
   }
 
   return str

@@ -26,5 +26,9 @@ module.exports = function replaceMark (str, parentFor) {
     const removeMark = str.split(mark)[1]
     return ["", removeMark]
   }
+  if (str.startsWith(mark = '@@constant__')) {
+    const removeMark = str.split(mark)[1]
+    return ["", removeMark]
+  }
   return ["", str]
 }

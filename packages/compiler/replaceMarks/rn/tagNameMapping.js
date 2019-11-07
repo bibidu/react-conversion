@@ -20,6 +20,12 @@ const mappings = {
   h1: function() {
     return baseReturn('View', { fontSize: 28, lineHeight: 700 })
   },
+  h2: function() {
+    return baseReturn('View', { fontSize: 24, lineHeight: 600 })
+  },
+  h3: function() {
+    return baseReturn('View', { fontSize: 20, lineHeight: 600 })
+  },
   button: function() {
     return baseReturn('Button')
   },
@@ -29,23 +35,26 @@ const mappings = {
 }
 
 function mappingFn(jsxTree) {
-  if (!jsxTree.tagName) {
-    return
+  
+  if (jsxTree.tagName) {
+    let fn
+    if (!(fn = mappings[jsxTree.tagName])) {
+      const error = `暂不支持转义标签: "${jsxTree.tagName}"！！！`
+      throw new Error(error)
+    }
+     const {
+       tagName: newTagName,
+       styles
+     } = fn(jsxTree.tagName, jsxTree.attrs)
+  
+     setJsxTreeTagName(jsxTree, newTagName)
+     setJsxTreeStyles(jsxTree, styles)
   }
-  let fn
-  if (!(fn = mappings[jsxTree.tagName])) {
-    const error = `暂不支持转义标签: "${jsxTree.tagName}"！！！`
-    throw new Error(error)
-  }
-   const {
-     tagName: newTagName,
-     styles
-   } = fn(jsxTree.tagName, jsxTree.attrs)
-
-   setJsxTreeTagName(jsxTree, newTagName)
-   setJsxTreeStyles(jsxTree, styles)
 
   jsxTree.children.forEach(child => mappingFn(child))
+  if (jsxTree.next) {
+    mappingFn(jsxTree.next)
+  }
 }
 
 
