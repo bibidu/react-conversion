@@ -1,5 +1,7 @@
 const t = require('@babel/types')
-const { ast2code } = require('../compile/utils')
+const { ast2code } = require('../../compile/utils')
+// const { isCreateElement } = require('./utils')
+
 module.exports = function mainVisitor(traverse, ast, params) {
   traverse(ast, {
     Program(path) {
@@ -70,17 +72,17 @@ module.exports = function mainVisitor(traverse, ast, params) {
     // }
   })
 }
-function isCreateElement(node) {
-  if (node === null) {
-    return true
-  }
-  if (
-    node.type === 'CallExpression'
-    && node.callee.object
-    && node.callee.object.name === 'React'
-    && node.callee.property.name === 'createElement'
-  ) {
-    return true
-  }
-  return false
-}
+// function isCreateElement(node) {
+//   if (node === null) {
+//     return true
+//   }
+//   if (
+//     node.type === 'CallExpression'
+//     && node.callee.object
+//     && node.callee.object.name === 'React'
+//     && node.callee.property.name === 'createElement'
+//   ) {
+//     return true
+//   }
+//   return false
+// }

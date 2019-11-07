@@ -1,0 +1,71 @@
+{
+  "tagName": "TouchableOpacity",
+  "attrs": {
+    "id": "@@attrValue__\"container\"",
+    "onClick": "@@attrValueDynatic__() => alert(1)"
+  },
+  "children": [
+    {
+      "tagName": "View",
+      "attrs": {
+        "key": "@@attrValueDynatic__idx",
+        "styles": {
+          "fontSize": 28,
+          "lineHeight": 700
+        }
+      },
+      "children": [
+        {
+          "tagName": "Button",
+          "attrs": {
+            "key": "@@attrValueDynatic__friend.id"
+          },
+          "children": [
+            {
+              "tagName": "Text",
+              "attrs": null,
+              "value": "@@string__friend",
+              "children": []
+            }
+          ],
+          "for": {
+            "list": "item.friends",
+            "item": "friend"
+          }
+        }
+      ],
+      "for": {
+        "list": "list",
+        "item": "item",
+        "index": "idx"
+      }
+    },
+    {
+      "tagName": "View",
+      "attrs": null,
+      "children": [
+        {
+          "tagName": "View",
+          "attrs": {
+            "styles": {
+              "fontSize": 28,
+              "lineHeight": 700
+            }
+          },
+          "children": [
+            {
+              "tagName": "Text",
+              "attrs": null,
+              "value": "12",
+              "children": []
+            }
+          ]
+        }
+      ],
+      "if": [
+        "@@logic__'a'&&'b'||show",
+        "@@logic__||"
+      ]
+    }
+  ]
+}

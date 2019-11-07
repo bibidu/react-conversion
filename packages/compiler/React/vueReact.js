@@ -1,14 +1,12 @@
-module.exports = React = {
-	Component: class {
-    constructor(p){
-      this.props = p || {}
-    }
-  },
+const react = require('./react')
+
+module.exports = vueReact = {
+	Component: react.Component,
   createElement: function(tagNameOrComponentName, attrs, ...children) {
     const tree = {}
-    tree.children = []
     tree.tagName = tagNameOrComponentName
     tree.attrs = attrs
+    tree.children = []
     children.forEach(child => {
       if (typeof child === 'string') {
         tree.children.push({

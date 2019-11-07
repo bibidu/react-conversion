@@ -1,16 +1,19 @@
 const babel = require("@babel/core")
 const traverse = require('@babel/traverse').default
 const parser = require('@babel/parser')
-const React = require('../React')
+const React = require('../React/react')
 const { toObject } = require('../utils')
 const generate = require('@babel/generator').default
 
-const visitors = require('../visitors')
+const {
+  vueVisitors,
+  rnVisitors
+} = require('../visitors')
 const afterCompileMake = require('./afterCompileMake')
 
 
 
-module.exports = function compile(code) {
+module.exports = function compile(target, code) {
   let renderString, props = {}
   const r = babel.transformSync(code, {
     presets: [
@@ -23,17 +26,15 @@ module.exports = function compile(code) {
   console.log('========== 原始jsx ===========')
   console.log(r.code);
   let ast = parser.parse(r.code)
-
   const params = {}
+  
+  const visitors = target === 'vue' ? vueVisitors : rnVisitors
   Object.values(visitors).forEach(visitor => {
     visitor(traverse, ast, params)
   })
-
   const compiled = generate(ast, {}, r.code)
-  console.log('=============================')
-  console.log('========== 标记后jsx ===========')
-  console.log(compiled.code)
-
+  // console.log('compiled.code')
+  // console.log(compiled.code)
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new Button({})`)
   renderString = 'function ' + f().render.toString()
 

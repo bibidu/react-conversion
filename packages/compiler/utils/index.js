@@ -109,6 +109,5 @@ module.exports.genVueInstance = function genVueInstance(params) {
     str += `${key}: ${JSON.stringify(value.default, null, 2)},`
   })
   str += '}'
-  console.log(str);
   return template(str)
 }

@@ -1,12 +1,12 @@
 const {
-  replaceMark,
-  replaceKey
+  vueReplaceMark,
+  vueReplaceKey
 } = require('../replaceMarks')
 
 const target = 'vue'
 
 function makeIf(ifs) {
-  let condition = ifs.map(item => replaceMark(item)[1]).join("")
+  let condition = ifs.map(item => vueReplaceMark(item)[1]).join("")
   if (condition.slice(-2) === '&&') {
     condition = condition.slice(0, -2)
   }
@@ -21,7 +21,7 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
   const block = tabSize.repeat(index)
   let template = ''
   if (jsxTree.tagName === 'text') {
-    template += `${replaceMark(jsxTree.value, parentFor)[1]}`
+    template += `${vueReplaceMark(jsxTree.value, parentFor)[1]}`
   } else {
     template += `<${jsxTree.tagName}`
   }
@@ -35,9 +35,9 @@ module.exports = function toVueTemplate(tabSize, jsxTree, index, parentFor = [])
     template += ` v-for="${iteratorItem} in ${list}"`
   }
   Object.entries(jsxTree.attrs || {}).forEach(([key, value]) => {
-    const [attrPrefix, replacedValue] = replaceMark(value, parentFor)
+    const [attrPrefix, replacedValue] = vueReplaceMark(value, parentFor)
     const operator = replacedValue ? '=' : ''
-    template += ` ${attrPrefix}${replaceKey(key)}${operator}${replacedValue}`
+    template += ` ${attrPrefix}${vueReplaceKey(key)}${operator}${replacedValue}`
   })
   if (jsxTree.tagName !== 'text') {
     template += `>`;

@@ -1,7 +1,5 @@
 module.exports = function replaceMark (str, parentFor) {
   let mark 
-  console.log('str')
-  console.log(str)
   // 裸字符
   if (str.startsWith(mark = '@@string__')) {
     return ["", `{{${str.split(mark)[1]}}}`]

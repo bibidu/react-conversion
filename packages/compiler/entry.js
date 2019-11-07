@@ -1,4 +1,4 @@
-const React = require('./React')
+const getReactEnvironment = require('./React')
 const {
   componentString,
   componentJson
@@ -13,31 +13,33 @@ const {
   genVueInstance
 } = require('./utils')
 
-function createPropCtx(props) {
+function createPropCtx({ props }) {
   const obj = {}
   Object.keys(props).forEach(p => {
-    obj[p] = getTypeDefault(props[p].type)
+    obj[p] = props[p].default
   })
   return {
     props: obj
   }
 }
 
-const target = 'vue'
-const mock = true
+let target
+// target = 'vue'
+target = 'rn'
 
-const { renderString, params } = jsxCompile(componentString) || '' // TODO: react字符串组件 -> react组件 [mock]
-let ctx = createPropCtx(params.props)
-const f = fn(`var React = ${toObject(React)};return ${renderString}`)
-// console.log(f.toString())
-const jsxTree = f().call()
-// fs.writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
-const vueHtml = toTemplate(target, jsxTree)
+const { renderString, params } = jsxCompile(target, componentString) || ''
+let ctx = createPropCtx(componentJson)
+const f = fn(`var React = ${toObject(getReactEnvironment(target))};return ${renderString}`)
+const jsxTree = f().call(ctx)
+// require('fs').writeFileSync('./1.json', JSON.stringify(jsxTree, null, 4), 'utf8')
+// console.log('jsxTree');
+// console.log(jsxTree);
+const html = toTemplate(target, jsxTree)
 // console.log('vueHtml');
-console.log('========== 编译结果 ===========')
-console.log(vueHtml);
-const html = genPreviewHtml(vueHtml, genVueInstance(componentJson))
+// console.log('========== 编译结果 ===========')
+// console.log(html);
+// const htmlFile = genPreviewHtml(html, genVueInstance(componentJson))
  
-console.log(html);
+// console.log(htmlFile);
  
 

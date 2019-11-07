@@ -22,6 +22,7 @@ module.exports.componentJson = {
 module.exports.componentString = `
 class Button extends React.Component{
   render() {
+    const { list, show, visiable } = this.props
     return (
       <div id="container" onClick={() => alert(1)}>
         {

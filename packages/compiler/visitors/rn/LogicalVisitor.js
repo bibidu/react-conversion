@@ -2,8 +2,8 @@ const t = require('@babel/types')
 const { 
   ast2code,
   code2ast
-} = require('../compile/utils')
-const { toObjectDeep } = require('../utils')
+} = require('../../compile/utils')
+const { toObjectDeep } = require('../../utils')
 
 module.exports = function LogicalVisitor(traverse, ast, params) {
   traverse(ast, {
@@ -70,13 +70,13 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
           }
             // 三目 args idx
           if (args.type === 'ConditionalExpression') {
-            console.log('ConditionalExpression')
             const nodes = []
             let methodBody = {}
             deepTraversalConditional(args, nodes)
-            serilizeTests(nodes, methodBody)
-            const result = ternaryToCreateElement(methodBody)
-            path.node.arguments[idx] = t.identifier(result)
+            const str = markWrapper(nodes)
+            path.node.arguments[idx] = t.identifier(str)
+            // serilizeTests(nodes, methodBody)
+            // const result = ternaryToCreateElement(methodBody)
             // t.callExpression(
             //   t.identifier("React.ternary"),
             //   [t.arrayExpression(
@@ -95,70 +95,45 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
     }
   })
 }
-
-function ternaryToCreateElement(tree){
-  let str = ''
-  if (tree['@@isElement__']) {
-    return tree.value
-  }
-  Object.keys(tree).forEach((k, idx) => {
-    const ifElse = idx === 0 ? `if: \`@@ternary__${k}\`` : `else: '@@else__'`
-    if (tree[k]['@@isElement__']) {
-      str += `React.createElement("template", { ${ifElse} }, ${tree[k].value}),\n`
-    } else {
-      const value = ternaryToCreateElement(tree[k])
-      str += `React.createElement("template", { ${ifElse} }, ${value})`
-    }
+function markWrapper(nodes) {
+  let str = 'React.logicWrapper('
+  nodes.forEach(node => {
+    const element = node.isElement ? node.value : `React.constant(${node.value}, "${node.after}")`
+    str += `${element},\n`
   })
+  str += ')'
   return str
 }
-function serilizeTests(nodes, methodBody) {
-    let cache = []
-    nodes.forEach(node => {
-      node.test.forEach(t => {
-        cache.push(t)
-        _deepPathSetValue(methodBody, cache)
-      })
-      _deepPathSetValue(methodBody, cache, {
-        '@@isElement__': true,
-        type: node.type,
-        value: node.value
-      })
-      cache = []
-    })
-    function _deepPathSetValue(obj, paths, value) {
-      return paths.reduce((obj, curr, index) => {
-        if (typeof obj[curr] !== 'object') {
-          obj[curr] = {}
-        }
-        if (value !== undefined && index === paths.length - 1) {
-          obj[curr] = value
-        }
-        return obj[curr]
-      }, obj)
-    }
-}
 // "`@@condition__"   "`"
-function deepTraversalConditional(current, nodes, tests = []) {
-  let test
+function deepTraversalConditional(current, nodes) {
+  // let test
   if (current.test) {
-    test =  ast2code(current.test)
+    // test =  ast2code(current.test)
+    nodes.push({
+        isElement: isCreateElement(current.test),
+        value: ast2code(current.test),
+      after: '?'
+    })
   }
   if (current.consequent) {
     if (current.consequent.type === 'ConditionalExpression') {
-      deepTraversalConditional(current.consequent, nodes, tests.concat(test))
+      deepTraversalConditional(current.consequent, nodes)
     } else {
       nodes.push({
-        test: tests.concat(test), value: ast2code(current.consequent), type: isCreateElement(current.consequent) ? 'element' : 'not-element'
+        isElement: isCreateElement(current.consequent),
+        value: ast2code(current.consequent),
+        after: ':'
       })
     }
   }
   if (current.alternate) {
     if (current.alternate.type === 'ConditionalExpression') {
-      deepTraversalConditional(current.alternate, nodes, tests.concat(`!${test}`))
+      deepTraversalConditional(current.alternate, nodes)
     } else {
       nodes.push({
-        test: tests.concat(`!${test}`), value: ast2code(current.alternate), type: isCreateElement(current.consequent) ? 'element' : 'not-element'
+        isElement: isCreateElement(current.alternate),
+        value: ast2code(current.alternate),
+        after: ''
       })
     }
   }

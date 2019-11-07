@@ -1,0 +1,130 @@
+{
+  "tagName": "div",
+  "attrs": {
+    "id": "@@attrValue__\"container\"",
+    "onClick": "@@attrValue__() => alert(1)"
+  },
+  "children": [
+    {
+      "tagName": "h1",
+      "attrs": {
+        "key": "@@attrValue__idx"
+      },
+      "children": [
+        {
+          "tagName": "button",
+          "attrs": {
+            "key": "@@attrValue__friend.id"
+          },
+          "children": [
+            {
+              "tagName": "text",
+              "attrs": null,
+              "value": "@@string__friend",
+              "children": []
+            }
+          ],
+          "for": {
+            "list": "item.friends",
+            "item": "friend"
+          }
+        }
+      ],
+      "for": {
+        "list": "list",
+        "item": "item",
+        "index": "idx"
+      }
+    },
+    {
+      "tagName": "div",
+      "attrs": null,
+      "children": [
+        {
+          "tagName": "h1",
+          "attrs": null,
+          "children": [
+            {
+              "tagName": "text",
+              "attrs": null,
+              "value": "12",
+              "children": []
+            }
+          ]
+        }
+      ],
+      "if": [
+        "@@logic__'a'&&'b'||show",
+        "@@logic__||"
+      ]
+    },
+    {
+      "tagName": "template",
+      "attrs": {
+        "if": "@@ternary__show"
+      },
+      "children": [
+        {
+          "tagName": "h1",
+          "attrs": null,
+          "children": [
+            {
+              "tagName": "text",
+              "attrs": null,
+              "value": "h1",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tagName": "template",
+      "attrs": {
+        "else": "@@else__"
+      },
+      "children": [
+        {
+          "tagName": "template",
+          "attrs": {
+            "if": "@@ternary__!visiable"
+          },
+          "children": [
+            {
+              "tagName": "h2",
+              "attrs": null,
+              "children": [
+                {
+                  "tagName": "text",
+                  "attrs": null,
+                  "value": "h2",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tagName": "template",
+          "attrs": {
+            "else": "@@else__"
+          },
+          "children": [
+            {
+              "tagName": "h3",
+              "attrs": null,
+              "children": [
+                {
+                  "tagName": "text",
+                  "attrs": null,
+                  "value": "h3",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
