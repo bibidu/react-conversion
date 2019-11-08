@@ -60,10 +60,12 @@ function mappingFn(jsxTree) {
 
 Object.entries(mappings).forEach(([tagName, fn]) => {
   const _fn = fn
-  fn = function({ tagName, attrs }) {
+  mappings[tagName] = function(tagName, attrs) {
     const revertTagName = beforeMapping(tagName)
-    const newTagName = _fn(revertTagName, attrs)
-    afterMapping(newTagName)
+    const mappingReturn = _fn(revertTagName, attrs)
+    afterMapping(mappingReturn)
+    
+    return mappingReturn
   }
 })
 

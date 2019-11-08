@@ -3,7 +3,6 @@ const { ast2code } = require('../../compile/utils')
 
 module.exports = function mainVisitor(traverse, ast, params) {
   traverse(ast, {
-    
     CallExpression(path) {
       if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
         const attrExpression = path.node.arguments[1]

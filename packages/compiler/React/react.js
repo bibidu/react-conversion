@@ -3,5 +3,6 @@ module.exports = {
     constructor(p){
       this.props = p || {}
     }
+    setState() {}
   }
 }

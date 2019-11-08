@@ -1,26 +1,70 @@
+const store = require('../store')
 const tagNameMappingFn = require('../replaceMarks/rn/tagNameMapping')
 const {
   rnReplaceMark
 } = require('../replaceMarks')
 
 module.exports = function toRNTemplate(tabSize, jsxTree, index, parentFor = []) {
-  console.log('toRNTemplate')
-  console.log(jsxTree)
+  // require('fs').writeFileSync('./2.json', JSON.stringify(jsxTree, null, 2), 'utf8')
   // 替换标签
   tagNameMappingFn(jsxTree)
-  // require('fs').writeFileSync('./2.json', JSON.stringify(jsxTree, null, 2), 'utf8')
-  // 生成RN模板
-  const str = genRnCode(jsxTree)
-  console.log('resault')
-  console.log('====================')
-  console.log(str)
+  // 生成RN 顶部引用
+  const imports = genRnImports()
+
+  // 生成RN render中除了h函数的部分
+  const renderExceptH = getRenderExceptH()
+  // 生成RN render.template
+  const renderTemplate = genRnRenderTemplate(jsxTree)
+  // 生成RN 底部export
+  const exportTemplate = genRnExportTemplate()
+  const renderFn = renderWrapper(renderExceptH, renderTemplate)
+  console.log('==================== RNresult ====================')
+  console.log('========================================')
+  console.log(`${imports}\n${renderFn}\n${exportTemplate}`);
   // console.log(jsxTree)
 }
 
 const tabSize = 2
 const block = (tab) => '  '.repeat(tab)
 
-function genRnCode(jsxTree, tab = 0) {
+function genRnExportTemplate() {
+  const { name: componentName } = store.get('componentJson')
+  return `\nexport default ${componentName}`
+}
+function renderWrapper(renderExceptH, renderTemplate) {
+  const { name: componentName } = store.get('componentJson')
+  return `class ${componentName} extends React.Component {
+    render() {
+      ${renderExceptH}\n
+      return (
+        ${renderTemplate}
+      )
+    }
+  }` 
+}
+function getRenderExceptH() {
+  const exceptHs = store.get('renderExceptH') || []
+  return exceptHs.join('\n')
+}
+function genRnImports() {
+  let str = `import React, { Component } from 'react'\n`
+  const tagsSet = store.get('rnTags')
+  const tagsArr = ([...tagsSet]).concat('StyleSheet')
+  tagsArr.map((tag, idx) => {
+    if (idx === 0) {
+      str += `{`
+    }
+    str += ` ${tag},`
+    if (idx === tagsArr.length - 1) {
+      str += `}`
+    }
+  }, str += `import `)
+  str = str.replace(/,}$/, ' }')
+  str += `from 'react-native'`
+  return str
+}
+
+function genRnRenderTemplate(jsxTree, tab = 0) {
   let str = ''
   const {
     type, tagName, attrs, for: fors, if: ifs, value, next, before, after, children
@@ -70,7 +114,7 @@ function genRnCode(jsxTree, tab = 0) {
     str += `${block(tab + 1)}${removeMarkValue}`
   }
 
-  children.forEach(child => str += genRnCode(child, tab + 1))
+  children.forEach(child => str += genRnRenderTemplate(child, tab + 1))
 
   if (tagName) { 
     str += `\n${block(tab)}</${tagName}>`
@@ -88,7 +132,7 @@ function genRnCode(jsxTree, tab = 0) {
   }
 
   if (next) {
-    str += genRnCode(next, tab)
+    str += genRnRenderTemplate(next, tab)
   }
 
   return str

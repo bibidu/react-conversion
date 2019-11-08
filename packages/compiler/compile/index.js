@@ -10,10 +10,12 @@ const {
   rnVisitors
 } = require('../visitors')
 const afterCompileMake = require('./afterCompileMake')
+const store = require('../store')
 
 
 
-module.exports = function compile(target, code) {
+module.exports = function compile(target, code, componentJson) {
+  store.set('componentJson', componentJson)
   let renderString, props = {}
   const r = babel.transformSync(code, {
     presets: [
@@ -33,9 +35,7 @@ module.exports = function compile(target, code) {
     visitor(traverse, ast, params)
   })
   const compiled = generate(ast, {}, r.code)
-  console.log('compiled.code')
-  console.log(compiled.code)
-  const f = new Function(`var React=${toObject(React)};${compiled.code}return new Button({})`)
+  const f = new Function(`var React=${toObject(React)};${compiled.code}return new ${componentJson.name}({})`)
   renderString = 'function ' + f().render.toString()
 
   // 字符串后处理

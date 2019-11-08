@@ -3,7 +3,7 @@ const {
   ast2code,
   code2ast
 } = require('../../compile/utils')
-const { toObjectDeep } = require('../../utils')
+// const { toObjectDeep } = require('../../utils')
 
 module.exports = function LogicalVisitor(traverse, ast, params) {
   traverse(ast, {
@@ -81,8 +81,6 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
   })
 }
 function markWrapper(nodes) {
-  console.log('nodes')
-  console.log(nodes)
   let str = 'React.logicWrapper('
   nodes.forEach(node => {
     const element = node.isElement ?

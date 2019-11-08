@@ -9,8 +9,6 @@ module.exports = function toTemplate(target, jsxTree, index = 0) {
     return toVueTemplate(tabSize, jsxTree, index)
   }
   if (target === 'rn') {
-    console.log('jsxTree')
-    console.log(JSON.stringify(jsxTree, null, 2))
     return toRNTemplate(tabSize, jsxTree, index)
   }
 }

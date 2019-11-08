@@ -1,6 +1,5 @@
-const tags = new Set()
+const store = require('../../store')
 
-module.exports = function afterMapping(tagName) {
-  tags.add(tagName)
-  console.log(`当前tags: `, tags)
+module.exports = function afterMapping(mappingReturn) {
+  store.add('rnTags', mappingReturn.tagName)
 }

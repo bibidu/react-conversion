@@ -1,6 +1,7 @@
 const React = require('./React')
 
 module.exports.componentJson = {
+  name: 'T',
   props: {
     list: {
       type: 'array',
@@ -20,9 +21,13 @@ module.exports.componentJson = {
   }
 }
 module.exports.componentString = `
-class Button extends React.Component{
+class T extends React.Component{
   render() {
     const { list, show, visiable } = this.props
+    this.setState({})
+    //fetch().then(res => {
+      //this.setState({})
+    //})
     return (
       <div id="container" onClick={() => alert(1)}>
         {
@@ -53,41 +58,3 @@ class Button extends React.Component{
   }
 }
 `
-// show ? <h1>123</h1> : <h1>456</h1>
-const componentString1 = `
-
-class Button extends React.Component{
-  show = () => {
-    console.log('show')
-    // this.setState({
-    // 	cool: true
-    // })
-  }
-  render(){
-    const { msg, list } = this.props
-    return (
-      <div id="app" onClick={this.show}>
-        <div id="container">
-          {
-            list.map(item => (
-              <h1>
-                <nutton>button</nutton>
-              </h1>
-            ))
-          }
-          <span>12</span>
-        </div>
-      </div>
-    )
-  }
-}
-Button.propTypes = {
-  msg: 'string',
-  list: 'Array'
-};`
-module.exports.mockRenderString = `function render() {
-  var msg = this.props.msg;
-  return React.createElement("div", null, React.createElement("button", {
-    onClick: \`@@ctxString__this.show\`
-  }, \`@@ternary__msg ? '隐藏' : '显示'\`, "Toast"), React.createElement("div", null, React.createElement("div", null, \`@@ternary__msg || 'toast'\`)));
-}`

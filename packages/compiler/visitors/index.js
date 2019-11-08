@@ -4,5 +4,6 @@ module.exports.vueVisitors = [
 ]
 module.exports.rnVisitors = [
   require('./rn/LogicalVisitor'),
-  require('./rn/MainVisitor')
+  require('./rn/MainVisitor'),
+  require('./rn/GetRenderExceptHVisitor')
 ]

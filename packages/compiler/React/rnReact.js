@@ -71,8 +71,6 @@ module.exports = rnReact = {
       curr.next = prev
       return curr
     })
-    console.log('obj')
-    console.log(obj)
     return obj
   },
   merge(obj, attrs) {
