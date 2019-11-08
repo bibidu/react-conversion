@@ -1,33 +1,7 @@
-const React = require('./React')
-
-module.exports.componentJson = {
-  name: 'T',
-  props: {
-    list: {
-      type: 'array',
-      default: [
-        { id: 1, friends: ['Alice', 'John'] },
-        { id: 2, friends: ['Tom', 'bibidu'] }
-      ]
-    },
-    show: {
-      type: 'boolean',
-      default: true
-    },
-    visiable: {
-      type: 'boolean',
-      default: true
-    }
-  }
-}
-module.exports.componentString = `
 class T extends React.Component{
   render() {
-    const { list, show, visiable } = this.props
+    const { list, show, visiable, msg1 } = this.props
     this.setState({})
-    //fetch().then(res => {
-      //this.setState({})
-    //})
     return (
       <div id="container" onClick={() => alert(1)}>
         {
@@ -57,4 +31,3 @@ class T extends React.Component{
     )
   }
 }
-`

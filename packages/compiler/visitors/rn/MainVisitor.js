@@ -1,10 +1,11 @@
 const t = require('@babel/types')
-const { ast2code } = require('../../compile/utils')
+const { ast2code } = require('../../utils/babelUtil')
+const { isCreateElement } = require('../utils')
 
-module.exports = function mainVisitor(traverse, ast, params) {
-  traverse(ast, {
+// const ClazzName = 'T'
+module.exports = {
     CallExpression(path) {
-      if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
+      if (isCreateElement(path.node)) {
         const attrExpression = path.node.arguments[1]
         let chlidrenElement = path.node.arguments[2]
         // attrs的每个value添加标记
@@ -53,12 +54,8 @@ module.exports = function mainVisitor(traverse, ast, params) {
         }
       }
     },
-    LogicalExpression() {
-      // console.log('LogicalExpression ===============');
-    },
     ConditionalExpression(path) {
       const code = ast2code(path.node)
       path.replaceWith(t.identifier("`@@string__" + code + "`"))
     }
-  })
 }

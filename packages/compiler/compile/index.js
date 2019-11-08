@@ -6,10 +6,10 @@ const { toObject } = require('../utils')
 const generate = require('@babel/generator').default
 
 const {
+  baseVisitors,
   vueVisitors,
   rnVisitors
 } = require('../visitors')
-const afterCompileMake = require('./afterCompileMake')
 const store = require('../store')
 
 
@@ -24,22 +24,18 @@ module.exports = function compile(target, code, componentJson) {
     ],
     plugins: ["@babel/plugin-proposal-class-properties"]
   })
-  console.log('=============================')
-  console.log('========== 原始jsx ===========')
-  console.log(r.code);
   let ast = parser.parse(r.code)
   const params = {}
   
   const visitors = target === 'vue' ? vueVisitors : rnVisitors
-  Object.values(visitors).forEach(visitor => {
-    visitor(traverse, ast, params)
+  Object.values(baseVisitors.concat(visitors)).forEach(visitor => {
+    traverse(ast, visitor)
+    // visitor(traverse, ast, params)
   })
   const compiled = generate(ast, {}, r.code)
+
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new ${componentJson.name}({})`)
   renderString = 'function ' + f().render.toString()
-
-  // 字符串后处理
-  renderString = afterCompileMake(renderString)
   return {
     renderString,
     params: {

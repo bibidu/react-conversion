@@ -1,12 +1,9 @@
 const t = require('@babel/types')
 const { 
   ast2code,
-  code2ast
-} = require('../../compile/utils')
-const { toObjectDeep } = require('../../utils')
+} = require('../../utils/babelUtil')
 
-module.exports = function LogicalVisitor(traverse, ast, params) {
-  traverse(ast, {
+module.exports = {
     CallExpression(path) {
       if (path.node.callee.object && path.node.callee.object.name === 'React' && path.node.callee.property.name === 'createElement') {
         Array.from(path.node.arguments).forEach((args, idx) => {
@@ -92,7 +89,6 @@ module.exports = function LogicalVisitor(traverse, ast, params) {
         })
       }
     }
-  })
 }
 
 function ternaryToCreateElement(tree){

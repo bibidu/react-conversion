@@ -5,7 +5,6 @@ const {
 } = require('../replaceMarks')
 
 module.exports = function toRNTemplate(tabSize, jsxTree, index, parentFor = []) {
-  // require('fs').writeFileSync('./2.json', JSON.stringify(jsxTree, null, 2), 'utf8')
   // 替换标签
   tagNameMappingFn(jsxTree)
   // 生成RN 顶部引用
@@ -18,10 +17,8 @@ module.exports = function toRNTemplate(tabSize, jsxTree, index, parentFor = []) 
   // 生成RN 底部export
   const exportTemplate = genRnExportTemplate()
   const renderFn = renderWrapper(renderExceptH, renderTemplate)
-  console.log('==================== RNresult ====================')
-  console.log('========================================')
-  console.log(`${imports}\n${renderFn}\n${exportTemplate}`);
-  // console.log(jsxTree)
+  const template = `${imports}\n${renderFn}\n${exportTemplate}`
+  return template
 }
 
 const tabSize = 2

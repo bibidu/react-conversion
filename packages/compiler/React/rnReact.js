@@ -22,7 +22,7 @@ module.exports = rnReact = {
     })
     return tree
   },
-  map: function(list, item, index) {
+  map: function(list, item, index) { 
     return function(fn) {
       const tree = fn()
       tree.attrs = tree.attrs || {}

@@ -17,11 +17,6 @@ module.exports.extractUsePrefix = function extractUsePrefix(string) {
   return [string.slice(0, lastDotIndex), string.slice(lastDotIndex + 1)]
 }
 
-// module.exports = function markTernary() {
-  
-// }
-
-
 module.exports.fn = function fn(text) {
   return new Function(text)
 }
@@ -110,4 +105,14 @@ module.exports.genVueInstance = function genVueInstance(params) {
   })
   str += '}'
   return template(str)
+}
+
+module.exports.createPropCtx = function createPropCtx({ props }) {
+  const obj = {}
+  Object.keys(props).forEach(p => {
+    obj[p] = props[p].default
+  })
+  return {
+    props: obj
+  }
 }

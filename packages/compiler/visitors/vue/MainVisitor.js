@@ -1,9 +1,7 @@
 const t = require('@babel/types')
-const { ast2code } = require('../../compile/utils')
-// const { isCreateElement } = require('./utils')
+const { ast2code } = require('../../utils/babelUtil')
 
-module.exports = function mainVisitor(traverse, ast, params) {
-  traverse(ast, {
+module.exports = {
     Program(path) {
       Array.from(path.node.body).forEach(child => {
         if (child.type == 'ExpressionStatement') {
@@ -70,7 +68,6 @@ module.exports = function mainVisitor(traverse, ast, params) {
     //   const code = ast2code(path.node)
     //   path.replaceWith(t.identifier("`@@string__" + code + "`"))
     // }
-  })
 }
 // function isCreateElement(node) {
 //   if (node === null) {
