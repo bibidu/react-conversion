@@ -1,4 +1,12 @@
 class T extends React.Component{
+  constructor(props) {
+    super(props)
+  }
+  test() {
+    this.setState({
+      
+    })
+  }
   render() {
     const { list, show, visiable, msg1 } = this.props
     this.setState({})

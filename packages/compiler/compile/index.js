@@ -30,12 +30,12 @@ module.exports = function compile(target, code, componentJson) {
   const visitors = target === 'vue' ? vueVisitors : rnVisitors
   Object.values(baseVisitors.concat(visitors)).forEach(visitor => {
     traverse(ast, visitor)
-    // visitor(traverse, ast, params)
   })
   const compiled = generate(ast, {}, r.code)
 
   const f = new Function(`var React=${toObject(React)};${compiled.code}return new ${componentJson.name}({})`)
   renderString = 'function ' + f().render.toString()
+  store.set('componentInstance', f())
   return {
     renderString,
     params: {
