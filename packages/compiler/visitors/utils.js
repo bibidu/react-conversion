@@ -13,3 +13,13 @@ module.exports.isCreateElement = function isCreateElement(node) {
   }
   return false
 }
+
+module.exports.isReactMethodIdentifier = function isReactMethod(node) {
+  if (
+    node.type === 'Identifier'
+    && node.name.startsWith('React.')
+  ) {
+    return true
+  }
+  return false
+}

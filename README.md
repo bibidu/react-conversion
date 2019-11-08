@@ -202,6 +202,11 @@ babel/core、types、generate等包时本身体积过大，将ES6引入、暴露
 
 - [x] onClick={() => this.tapContainer()} 编译结果丢失() => {}
 
+- [x] logicalVisitor改造ast后添加了identifier类型的React运行时方法，导致MainVisitor判断时也进行了判断，但这种情况应该忽略
+
+- [ ] render中jsx使用了renderA、renderB，在编译时都会合并到render方法中，如何在编译完毕后再返回到各自的renderA、renderB中
+
+- [ ] 当jsx中出现 if (flag) { return <h1/> }的写法时，如何转化成React运行时函数的形式。（思考当前编译方案的思路是否可行）
 
 - [ ] vue的jsx写法如何支持嵌套:
 

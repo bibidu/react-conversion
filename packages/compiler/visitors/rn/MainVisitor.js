@@ -1,6 +1,9 @@
 const t = require('@babel/types')
 const { ast2code } = require('../../utils/babelUtil')
-const { isCreateElement } = require('../utils')
+const {
+  isCreateElement,
+  isReactMethodIdentifier
+} = require('../utils')
 
 // const ClazzName = 'T'
 module.exports = {
@@ -43,7 +46,10 @@ module.exports = {
           }
         }
         // 标记字符串
-        if (['Identifier', 'BinaryExpression'].includes(chlidrenElement.type)) {
+        if (
+          ['Identifier', 'BinaryExpression'].includes(chlidrenElement.type)
+          && !isReactMethodIdentifier(chlidrenElement)
+        ) {
           let code = ast2code(path.node.arguments[2])
             if (code.startsWith('"') &&  code.endsWith('"')) {
               code = t.identifier("`@@string__" + code + "`")

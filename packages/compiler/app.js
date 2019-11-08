@@ -12,27 +12,29 @@ const {
   createPropCtx
 } = require('./utils')
 
-const DEBUG = false
+// const DEBUG = false
+const DEBUG = true
 
-function start(target) {
+function start(target = 'rn') {
   // 构造上下文
   const ctx = createPropCtx(componentJson)
 
   // 运行时的react库
   const runtimeReactLib = getReactEnvironment(target)
 
-  // 1.得到编译后后的字符串
-  const { renderString } = jsxCompile(target, componentString, componentJson)
+  // 1.得到编译后的组件字符串
+  const { markedComponent } = jsxCompile(target, componentString, componentJson)
 
   if (DEBUG) {
-    console.log(`==================== renderString ====================`)
+    console.log(`==================== markedComponent ====================`)
     console.log('========================================')
-    console.log(renderString);
+    console.log(markedComponent);
+    console.log('====================over====================')
   }
 
-  // 获取render函数
-  const f = fn(`var React = ${toObject(runtimeReactLib)};return ${renderString}`)
-  const jsxTree = f().call(new react.Component(ctx.props))
+  // 2. 得到`运行时方法`改造后的jsxTree
+  const renderWrapper = fn(`var React = ${toObject(runtimeReactLib)};${markedComponent};return new ${componentJson.name}().render()`)
+  const jsxTree = renderWrapper()
 
   if (DEBUG) {
     console.log(`==================== jsxTree ====================`)
@@ -40,7 +42,7 @@ function start(target) {
     console.log(jsxTree);
   }
 
-  // 2.转换成输出结果
+  // 3.转换成输出结果
   const html = toTemplate(target, jsxTree)
   if (DEBUG) {
     console.log(`==================== ${target}编译结果 ====================`)

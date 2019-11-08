@@ -1,0 +1,66 @@
+{
+  "tagName": "div",
+  "attrs": {
+    "id": "@@attrValue__\"container\""
+  },
+  "children": [
+    {
+      "tagName": "div",
+      "attrs": null,
+      "children": [
+        {
+          "type": "ternary",
+          "after": " ?",
+          "value": "@@constant__show",
+          "children": [],
+          "before": "{",
+          "next": {
+            "tagName": "h1",
+            "attrs": null,
+            "children": [
+              {
+                "tagName": "text",
+                "attrs": null,
+                "value": "h1",
+                "children": []
+              }
+            ],
+            "after": " :",
+            "next": {
+              "type": "ternary",
+              "after": " ?",
+              "value": "@@constant__!visiable",
+              "children": [],
+              "next": {
+                "tagName": "h2",
+                "attrs": null,
+                "children": [
+                  {
+                    "tagName": "text",
+                    "attrs": null,
+                    "value": "h2",
+                    "children": []
+                  }
+                ],
+                "after": " :",
+                "next": {
+                  "tagName": "h3",
+                  "attrs": null,
+                  "children": [
+                    {
+                      "tagName": "text",
+                      "attrs": null,
+                      "value": "h3",
+                      "children": []
+                    }
+                  ],
+                  "after": "}"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,10 @@
 const code = `
-const T = () => (
-  <div>
-    { show ? this.renderA() : this.renderB() }
-  </div>
-)
+const T = () => {
+	if (flag) {
+		return <h1>1</h1>
+	}
+	return <h1>2</h1>
+}
 `
   // <p v-else>No message.</p>
   const rest = require("@babel/core").transform(code, {

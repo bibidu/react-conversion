@@ -32,12 +32,13 @@ module.exports = function compile(target, code, componentJson) {
     traverse(ast, visitor)
   })
   const compiled = generate(ast, {}, r.code)
-
-  const f = new Function(`var React=${toObject(React)};${compiled.code}return new ${componentJson.name}({})`)
-  renderString = 'function ' + f().render.toString()
-  store.set('componentInstance', f())
+  // const f = new Function(`var React=${toObject(React)};${compiled.code}return new ${componentJson.name}({})`)
+  // renderString = 'function ' + f().render.toString()
+  // store.set('componentInstance', f())
+  
   return {
-    renderString,
+    markedComponent: compiled.code,
+    // renderString,
     params: {
       props: params.props || {}
     }
