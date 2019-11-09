@@ -1,0 +1,24 @@
+{
+  "name": "T",
+  "props": {
+    "list": {
+      "type": "array",
+      "default": [
+        { "id": 1, "friends": ["Alice", "John"] },
+        { "id": 2, "friends": ["Tom", "bibidu"] }
+      ]
+    },
+    "show": {
+      "type": "boolean",
+      "default": true
+    },
+    "visiable": {
+      "type": "boolean",
+      "default": true
+    },
+    "msg1": {
+      "type": "string",
+      "default": "default msg1"
+    }
+  }
+}

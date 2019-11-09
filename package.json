@@ -1,0 +1,32 @@
+{
+  "name": "react-conversion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bibidu/react-conversion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bibidu/react-conversion/issues"
+  },
+  "homepage": "https://github.com/bibidu/react-conversion#readme",
+  "dependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/generator": "^7.7.2",
+    "@babel/parser": "^7.7.3",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/preset-react": "^7.7.0",
+    "@babel/traverse": "^7.7.2",
+    "puppeteer": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
+}
