@@ -1,3 +1,5 @@
+import 'index.scss'
+
 class T extends React.Component {
   constructor(props) {
     super(props);
