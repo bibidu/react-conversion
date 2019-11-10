@@ -1,7 +1,7 @@
 const w = require('./walker')
 const {
   ast2code,
-} = require('../../utils')
+} = require('../../../utils')
 
 module.exports = {
   Program(path) {

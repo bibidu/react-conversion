@@ -1,7 +1,10 @@
 require('babel-polyfill')
 const fs = require("fs")
 const path = require("path")
-const compileJS = require('./compiler/babel')
+const {
+  compileJS,
+  revertJS
+} = require('./compiler/babel')
 const compileCSS = require('./compiler/postcss')
 const {
   extractCssEntryAndRevert,
@@ -24,7 +27,9 @@ outStyleFileNames.forEach(async ({ path: filePath }) => {
   compileJS(code)
   
   // 借助浏览器插入 `外联样式` 到组件，并返回 `内联样式`
-  externalStyle2Inline()
+  await externalStyle2Inline()
   // console.log(store);
+
+  revertJS()
   
 })

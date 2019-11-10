@@ -2,9 +2,9 @@ const {
   safeGet,
   ast2code,
   array
-} = require('../../utils')
+} = require('../../../utils')
 const saveStoreAboutUniqueId = require('./saveStoreAboutUniqueId')
-const store = require('../../store')
+const store = require('../../../store')
 const walk = (type) => {
   // console.log(type);
   return w[`walk${type}`]

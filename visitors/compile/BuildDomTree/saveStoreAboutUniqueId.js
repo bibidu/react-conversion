@@ -1,9 +1,9 @@
-const store = require('../../store')
+const store = require('../../../store')
 const {
   safeGet,
   ast2code,
   array
-} = require('../../utils')
+} = require('../../../utils')
 
 module.exports = function saveStoreAboutUniqueId(path, lastStackItem) {
   const uniqueId = path.arguments[1].properties[0].value.value

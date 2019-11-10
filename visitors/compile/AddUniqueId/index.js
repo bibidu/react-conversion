@@ -3,10 +3,10 @@ const {
   safeGet,
   ast2code,
   uniqueId,
-  array
-} = require('../../utils')
+  array,
+  isReactDom
+} = require('../../../utils')
 
-const isReactDom = (node) => safeGet(node, 'node.callee.object.name') === 'React' && safeGet(node, 'node.callee.property.name') === 'createElement'
 
 module.exports = {
   CallExpression(path) {

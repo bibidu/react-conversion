@@ -1,5 +1,8 @@
-module.exports = [
-  require('./CollectClassMethod'),
-  require('./AddUniqueId'),
-  require('./BuildDomTree')
+module.exports.compileVisitors = [
+  require('./compile/CollectClassMethod'),
+  require('./compile/AddUniqueId'),
+  require('./compile/BuildDomTree')
+]
+module.exports.revertVisitors = [
+  require('./revert/index')
 ]
