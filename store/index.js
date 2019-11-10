@@ -1,6 +1,7 @@
 module.exports = {
-  componentOutStyle: {},
+  externalStyle: {},
   classMethod: [],
   tagsInfo: {},
-  relatives: []
+  fsRelations: {},
+  sfRelations: {},
 }

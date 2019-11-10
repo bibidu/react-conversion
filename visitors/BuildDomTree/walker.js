@@ -6,6 +6,7 @@ const {
 const saveStoreAboutUniqueId = require('./saveStoreAboutUniqueId')
 const store = require('../../store')
 const walk = (type) => {
+  // console.log(type);
   return w[`walk${type}`]
 }
 
@@ -52,8 +53,10 @@ let w = {
       safeGet(state, 'state.source') === 'React.createElement'
       && store.classMethod.includes(path.property.name)
     ) {
-      store.relatives.push({ [path.property.name]: stacks[stacks.length - 1] })
-      
+      const uniqueId = path.property.name
+      const lastStackItem = stacks[stacks.length - 1]
+      ;(store.sfRelations[uniqueId] || (store.sfRelations[uniqueId] = [])).push(lastStackItem)
+      ;(store.fsRelations[lastStackItem] || (store.fsRelations[lastStackItem] = [])).push(uniqueId)
     }
     walk(path.object.type)(path.object)
     walk(path.property.type)(path.property)
@@ -100,6 +103,9 @@ let w = {
       // const uniqueId = path.arguments[1].properties[0].value.value
       // console.log(`out React: ${path.callee.property.name} ${uniqueId}`)
     }
+  },
+  walkUnaryExpression(path) {
+    walk(path.argument.type)(path.argument)
   },
   walkIfStatement(path) {
     walk(path.test.type)(path.test)

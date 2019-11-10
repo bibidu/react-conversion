@@ -9,8 +9,8 @@ module.exports = function saveStoreAboutUniqueId(path, lastStackItem) {
   const uniqueId = path.arguments[1].properties[0].value.value
 
   const tagName = path.arguments[0].value
-  let __className, className
-  let id
+  let __className = '', className = ''
+  let id = ''
 
   for (let i = 0; i < path.arguments[1].properties.length; i++) {
     const item = path.arguments[1].properties[i]
@@ -21,11 +21,11 @@ module.exports = function saveStoreAboutUniqueId(path, lastStackItem) {
       className = item.value.value.trim()
     }
     if (item.key.name.trim() === '__className') {
-      __className = item.value.value.trim()
+      __className = '"' + item.value.value.trim() + '"'
     }
   }
-
-  store.relatives.push({ [uniqueId]: lastStackItem})
+  ;(store.sfRelations[uniqueId] || (store.sfRelations[uniqueId] = [])).push(lastStackItem)
+  ;(store.fsRelations[lastStackItem] || (store.fsRelations[lastStackItem] = [])).push(uniqueId)
   store.tagsInfo[uniqueId] = {
     tagName,
     __className,

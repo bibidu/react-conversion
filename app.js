@@ -1,0 +1,30 @@
+require('babel-polyfill')
+const fs = require("fs")
+const path = require("path")
+const compileJS = require('./compiler/babel')
+const compileCSS = require('./compiler/postcss')
+const {
+  extractCssEntryAndRevert,
+  externalStyle2Inline
+} = require('./utils')
+const store = require('./store')
+
+// 读取组件入口文件
+const code = fs.readFileSync(path.join(__dirname, '/component/index.js'), 'utf8')
+// 提取组件中的css引用并转换
+const outStyleFileNames = extractCssEntryAndRevert(code)
+
+outStyleFileNames.forEach(async ({ path: filePath }) => {
+  const cssPATH = path.join(__dirname, 'component', filePath)
+
+  // 编译css并缓存 `externalStyle` 到store
+  await compileCSS(cssPATH)
+
+  // 编译js并缓存 `classMethod` `tagsInfo` `fsRelations` `sfRelations` 到store
+  compileJS(code)
+  
+  // 借助浏览器插入 `外联样式` 到组件，并返回 `内联样式`
+  externalStyle2Inline()
+  // console.log(store);
+  
+})

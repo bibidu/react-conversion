@@ -15,7 +15,6 @@ module.exports = {
       const attrsString = ast2code(path.node.arguments[1])
       // attr是null
       if (attrsString === 'null') {
-        console.log('true')
         attr = t.objectExpression([
           t.objectProperty(
             t.identifier('__className'),

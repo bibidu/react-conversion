@@ -1,41 +1,31 @@
-import 'index.scss'
-
-class T extends React.Component {
+require('index.scss')
+class T extends React.Component{
   constructor(props) {
-    super(props);
+    super(props)
   }
-
   renderTernary() {
-    if (this.props.show) {
-      return React.createElement("h1", null, "default ", this.props.show);
-    }
-
-    switch(true) {
-           case 1: {
-           		if (t) {
-                	return <h1/>
-                }
-           }    
-  	}
-    return React.createElement("div", null, "default ", this.props.show);
+    return (
+      <div>
+        {
+          show ? <h1>h1</h1> : !visiable ? <h2>h2</h2> : <h3>h3</h3>
+        }
+      </div>
+    )
   }
-
   renderTernary2() {
-    return React.createElement("div", null, show ? React.createElement("h1", null) : visiable ? React.createElement("h2", null) : React.createElement("h3", null));
+    if (true) {
+      return <h4>renderTernary2: h4</h4>
+    }
+    return <h5>renderTernary2: h5</h5>
   }
-
   render() {
-    const {
-      list,
-      show,
-      visiable,
-      msg1
-    } = this.props;
-    this.setState({});
-    return React.createElement("div", {
-      id: "container",
-      className: "dxz"
-    }, this.renderTernary(), this.renderTernary2());
+    const { list, show, visiable, msg1 } = this.props
+    this.setState({})
+    return (
+      <h6 id="container">
+        {this.renderTernary()}
+        {this.renderTernary2()}
+      </h6>
+    )
   }
-
 }
