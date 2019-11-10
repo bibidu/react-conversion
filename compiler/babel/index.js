@@ -21,19 +21,27 @@ module.exports.compileJS = function compileJS(code) {
     code = r.code
   }
 
-  // const ast = parser.parse(r.code)
   compileVisitors.forEach(visitor => {
-    // traverse(ast, visitor)
     _traverse(visitor)
   })
-
-  // store.addUniqueIdCode = ast2code(ast)
+  store.addUniqueIdCode = code
 }
 
 module.exports.revertJS = function revertJS() {
-  const ast = parser.parse(store.addUniqueIdCode)
+  let code = store.addUniqueIdCode
   revertVisitors.forEach(visitor => {
-    traverse(ast, visitor)
+    _traverse(visitor)
   })
+
+  function _traverse(visitor) {
+    const r = babel.transformSync(code, {
+      plugins: [
+        ["@babel/plugin-syntax-jsx"],
+        { visitor }
+      ],
+    })
+    code = r.code
+  }
+  console.log(code);
 }
 

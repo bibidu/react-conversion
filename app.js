@@ -16,6 +16,7 @@ const store = require('./store')
 const code = fs.readFileSync(path.join(__dirname, '/component/index.js'), 'utf8')
 
 // 提取组件中的css引用并转换
+// TODO: import的语法编译
 const outStyleFileNames = extractCssEntryAndRevert(code)
 
 outStyleFileNames.forEach(async ({ path: filePath }) => {
@@ -29,8 +30,8 @@ outStyleFileNames.forEach(async ({ path: filePath }) => {
   
   // 借助浏览器插入 `外联样式` 到组件，并返回 `内联样式`
   await externalStyle2Inline()
-  console.log(store);
 
   revertJS()
+  // console.log(store);
   
 })

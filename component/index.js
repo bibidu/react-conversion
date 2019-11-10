@@ -22,7 +22,7 @@ class T extends React.Component{
     const { list, show, visiable, msg1 } = this.props
     this.setState({})
     return (
-      <h6 id="container">
+      <h6 id="container" style={{border: '1px solid #ccc'}}>
         {this.renderTernary()}
         {this.renderTernary2()}
       </h6>
