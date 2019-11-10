@@ -11,18 +11,23 @@ const {
 const store = require('../../store')
 
 module.exports.compileJS = function compileJS(code) {
-  const r = babel.transformSync(code, {
-    presets: [
-      "@babel/preset-react",
-    ],
-    plugins: ["@babel/plugin-proposal-class-properties"],
-  })
-  const ast = parser.parse(r.code)
+  function _traverse(visitor) {
+    const r = babel.transformSync(code, {
+      plugins: [
+        ["@babel/plugin-syntax-jsx"],
+        { visitor }
+      ],
+    })
+    code = r.code
+  }
+
+  // const ast = parser.parse(r.code)
   compileVisitors.forEach(visitor => {
-    traverse(ast, visitor)
+    // traverse(ast, visitor)
+    _traverse(visitor)
   })
-  store.addUniqueIdCode = ast2code(ast)
-  console.log(store.addUniqueIdCode);
+
+  // store.addUniqueIdCode = ast2code(ast)
 }
 
 module.exports.revertJS = function revertJS() {

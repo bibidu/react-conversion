@@ -10,11 +10,57 @@ const walk = (type) => {
   return w[`walk${type}`]
 }
 
+const getUniqueId = (node) => {
+  for (let i = 0; i < node.openingElement.attributes.length; i++) {
+    const item = node.openingElement.attributes[i]
+    if (
+      item.type === 'JSXAttribute'
+      && item.name.name === '__className'
+    ) {
+      return item.value.value
+    }
+  }
+}
 const stacks = []
 
 let w = {
   walkProgram(path) {
     array(path.node.body).forEach(body => walk(body.type)(body))
+  },
+
+  walkJSXElement(path) {
+    const lastStackItem = stacks[stacks.length - 1]
+    saveStoreAboutUniqueId(path, lastStackItem)
+
+    const uniqueId = getUniqueId(path)
+    stacks.push(uniqueId)
+
+    walk(path.openingElement.type)(path.openingElement)
+    array(path.children).forEach(body => walk(body.type)(body))
+    walk(path.closingElement.type)(path.closingElement)
+
+    stacks.pop()
+  },
+  walkJSXText(path) {
+
+  },
+  walkJSXExpressionContainer(path) {
+    walk(path.expression.type)(path.expression, { source: 'JSXExpressionContainer'})
+  },
+  walkJSXOpeningElement(path) {
+
+    walk(path.name.type)(path.name)
+    array(path.attributes).forEach(body => walk(body.type)(body))
+  },
+  walkJSXClosingElement(path) {
+    walk(path.name.type)(path.name)
+  },
+  walkJSXIdentifier(path) {
+
+  },
+  walkJSXAttribute(path) {
+    walk(path.name.type)(path.name)
+    walk(path.value.type)(path.value)
   },
 
   walkClassDeclaration(path) {
@@ -27,14 +73,24 @@ let w = {
 
   walkClassMethod(path) {
     stacks.push(path.key.name)
-    // console.log(`into ClassMethod ${path.key.name}`)
-    walk(path.key.type)(path.key)
+    walk(path.key.type)(path.key, { source: 'classMethod' })
     walk(path.body.type)(path.body)
-    // console.log(`out ClassMethod ${path.key.name}`)
     stacks.pop()
   },
 
-  walkIdentifier(path) {
+  walkIdentifier(path, state) {
+    if (state && state.source === 'classMethod') {
+      // const uniqueId = path.name
+      // const lastStackItem = stacks[stacks.length - 1]
+      // if (!Array.isArray(store.sfRelations[uniqueId])) {
+      //   store.sfRelations[uniqueId] = []
+      // }
+      // if (!Array.isArray(store.fsRelations[lastStackItem])) {
+      //   store.fsRelations[lastStackItem] = []
+      // }
+      // store.sfRelations[uniqueId].push(lastStackItem)
+      // store.fsRelations[lastStackItem].push(uniqueId)
+    }
   },
 
   walkBlockStatement(path) {
@@ -49,15 +105,15 @@ let w = {
   },
 
   walkMemberExpression(path, state) {
-    if (
-      safeGet(state, 'state.source') === 'React.createElement'
-      && store.classMethod.includes(path.property.name)
-    ) {
-      const uniqueId = path.property.name
-      const lastStackItem = stacks[stacks.length - 1]
-      ;(store.sfRelations[uniqueId] || (store.sfRelations[uniqueId] = [])).push(lastStackItem)
-      ;(store.fsRelations[lastStackItem] || (store.fsRelations[lastStackItem] = [])).push(uniqueId)
-    }
+    // if (
+    //   safeGet(state, 'state.source') === 'React.createElement'
+    //   && store.classMethod.includes(path.property.name)
+    // ) {
+    //   const uniqueId = path.property.name
+    //   const lastStackItem = stacks[stacks.length - 1]
+    //   ;(store.sfRelations[uniqueId] || (store.sfRelations[uniqueId] = [])).push(lastStackItem)
+    //   ;(store.fsRelations[lastStackItem] || (store.fsRelations[lastStackItem] = [])).push(uniqueId)
+    // }
     walk(path.object.type)(path.object)
     walk(path.property.type)(path.property)
   },
@@ -88,21 +144,22 @@ let w = {
     walk(path.key.type)(path.key)
     walk(path.value.type)(path.value)
   },
-  walkCallExpression(path) {
-    let uniqueId
-    if (safeGet(path, 'path.callee.object.name') === 'React') {
-      uniqueId = saveStoreAboutUniqueId(path, stacks[stacks.length - 1])
-      stacks.push(uniqueId)
-      // console.log(`into React: ${path.callee.property.name} ${uniqueId}`)
+  walkCallExpression(path, state) {
+    // TODO: 后续加入作用域的判断
+    if (state && state.source === 'JSXExpressionContainer') {
+      const uniqueId = path.callee.property.name
+      const lastStackItem = stacks[stacks.length - 1]
+      if (!Array.isArray(store.sfRelations[uniqueId])) {
+        store.sfRelations[uniqueId] = []
+      }
+      if (!Array.isArray(store.fsRelations[lastStackItem])) {
+        store.fsRelations[lastStackItem] = []
+      }
+      store.sfRelations[uniqueId].push(lastStackItem)
+      store.fsRelations[lastStackItem].push(uniqueId)
     }
     walk(path.callee.type)(path.callee, { source: 'React.createElement'})
     array(path.arguments).forEach(arg => walk(arg.type)(arg))
-
-    if (safeGet(path, 'path.callee.object.name') === 'React') {
-      stacks.pop()
-      // const uniqueId = path.arguments[1].properties[0].value.value
-      // console.log(`out React: ${path.callee.property.name} ${uniqueId}`)
-    }
   },
   walkUnaryExpression(path) {
     walk(path.argument.type)(path.argument)

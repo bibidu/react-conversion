@@ -5,27 +5,46 @@ const {
   array
 } = require('../../../utils')
 
-module.exports = function saveStoreAboutUniqueId(path, lastStackItem) {
-  const uniqueId = path.arguments[1].properties[0].value.value
+module.exports = function saveStoreAboutUniqueId(node, lastStackItem) {
+  // if (!Array.isArray(store.sfRelations[uniqueId])) {
+  //   store.sfRelations[uniqueId] = []
+  // }
+  // if (!Array.isArray(store.fsRelations[lastStackItem])) {
+  //   store.fsRelations[lastStackItem] = []
+  // }
+  // store.sfRelations[uniqueId].push(lastStackItem)
+  // store.fsRelations[lastStackItem].push(uniqueId)
 
-  const tagName = path.arguments[0].value
+
+  let uniqueId
+  const tagName = node.openingElement.name.name
   let __className = '', className = ''
   let id = ''
 
-  for (let i = 0; i < path.arguments[1].properties.length; i++) {
-    const item = path.arguments[1].properties[i]
-    if (item.key.name.trim() === 'id') {
-      id = item.value.value.trim()
-    }
-    if (item.key.name.trim() === 'className') {
-      className = item.value.value.trim()
-    }
-    if (item.key.name.trim() === '__className') {
-      __className = '"' + item.value.value.trim() + '"'
+  for (let i = 0; i < node.openingElement.attributes.length; i++) {
+    const item = node.openingElement.attributes[i]
+    if (item.type === 'JSXAttribute') {
+      if (item.name.name.trim() === 'id') {
+        id = item.value.value.trim()
+      }
+      if (item.name.name.trim() === 'className') {
+        className = item.value.value.trim()
+      }
+      if (item.name.name.trim() === '__className') {
+        __className = item.value.value.trim()
+        uniqueId = __className
+      }
     }
   }
-  ;(store.sfRelations[uniqueId] || (store.sfRelations[uniqueId] = [])).push(lastStackItem)
-  ;(store.fsRelations[lastStackItem] || (store.fsRelations[lastStackItem] = [])).push(uniqueId)
+  if (!Array.isArray(store.sfRelations[uniqueId])) {
+    store.sfRelations[uniqueId] = []
+  }
+  if (!Array.isArray(store.fsRelations[lastStackItem])) {
+    store.fsRelations[lastStackItem] = []
+  }
+  store.sfRelations[uniqueId].push(lastStackItem)
+  store.fsRelations[lastStackItem].push(uniqueId)
+
   store.tagsInfo[uniqueId] = {
     tagName,
     __className,

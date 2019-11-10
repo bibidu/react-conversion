@@ -16,8 +16,6 @@ module.exports = async function externalStyle2Inline() {
   const html = createHTML(tagsInfo, fsRelations, ROOT)
   const script = createCSSScript(externalStyle)
   const inlineStyle = await runInBrowser({ html, script })
-  console.log('inlineStyle');
-  console.log(inlineStyle);
   store.inlineStyle = inlineStyle
   return inlineStyle
 }
