@@ -3,11 +3,14 @@ class T extends React.Component{
   constructor(props) {
     super(props)
   }
+  clickEvent() {
+    console.log('clickEvent')
+  }
   renderTernary() {
     return (
       <div>
         {
-          show ? <h1>h1</h1> : !visiable ? <h2>h2</h2> : <h3>h3</h3>
+          show ? <h1>h1</h1> : !visiable ? <h2 onClick={this.clickEvent}>h2</h2> : <h3>h3</h3>
         }
       </div>
     )

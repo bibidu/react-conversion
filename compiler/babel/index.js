@@ -14,6 +14,7 @@ module.exports.compileJS = function compileJS(code) {
   function _traverse(visitor) {
     const r = babel.transformSync(code, {
       plugins: [
+        // ["@babel/plugin-proposal-class-properties", { "loose": true }],
         ["@babel/plugin-syntax-jsx"],
         { visitor }
       ],
@@ -36,6 +37,7 @@ module.exports.revertJS = function revertJS() {
   function _traverse(visitor) {
     const r = babel.transformSync(code, {
       plugins: [
+        // ["@babel/plugin-proposal-class-properties", { "loose": true }],
         ["@babel/plugin-syntax-jsx"],
         { visitor }
       ],
