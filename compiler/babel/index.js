@@ -44,6 +44,18 @@ module.exports.revertJS = function revertJS() {
     })
     code = r.code
   }
+  const tags = [...store.rnUsingTags]
+  const usingTagsString = tags.reduce((prev, curr, idx) => {
+    const isLast = idx === tags.length - 1
+    const current = '   ' + prev + ','  + '\n' + curr 
+    return isLast ? current + `\n} from 'react-native'` : current
+  }, `import {
+    AppRegistry,
+    StyleSheet`)
+  console.log(usingTagsString);
+  console.log(`const styles = StyleSheet.create(`);
+  console.log(store.styleSheet);
+  console.log(`)`);
   console.log(code);
 }
 

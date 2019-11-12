@@ -23,16 +23,17 @@ module.exports = {
     const injectStyles = inlineStyles[__className] || {}
     const mergeStyle = Object.assign(injectStyles, tagStyle, initialInlineStyles)
     // 替换样式
-    setAttr(attrs, replaceStyle(mergeStyle))
+    const styleSheet = setStyleSheet(attrs, replaceStyle(mergeStyle), __className)
     // 移除__className
-    removeUniqueId(path)
-  }
+    removeUniqueId(path, ['__className'])
+  },
+
 }
 
 
-function removeUniqueId(path) {
+function removeUniqueId(path, attrs) {
   const args = path.node.openingElement.attributes.filter(
-    item => item.name.name !== '__className'
+    item => !attrs.includes(item.name.name)
   )
   path.node.openingElement.attributes = args
 }
@@ -46,7 +47,7 @@ function extractUniqueId(attrs, attr) {
   }
   return ''
 }
-
+// TODO: 允许import引入css、并在解析完毕后删除css、允许class内static语法
 function extractStyleAttr(attrs, def) {
   const style = {}
   for (let i = 0; i < attrs.length; i++) {
@@ -66,22 +67,24 @@ function extractStyleAttr(attrs, def) {
   }
   return style
 }
-function setAttr(attrs, injectStyles) {
-  const jsxAttributes = []
-  attrs.push(
-    t.jsxAttribute(
+
+function setStyleSheet(attrs, injectStyles, uniqueId) {
+  // 动态生成的新节点不含有uniqueId "如h1内的文本标签<Text />"
+  if (uniqueId) {
+    uniqueId = uniqueId.slice(2)
+    const styleSheet = {}
+    styleSheet[uniqueId] = injectStyles
+    const styleAttr = t.jsxAttribute(
       t.jsxIdentifier('style'),
       t.JSXExpressionContainer(
-        t.objectExpression(
-          Object.entries(injectStyles).map(([key, value]) => {
-            return t.objectProperty(
-              t.Identifier(key),
-              typeof value === 'number' ?
-                t.NumericLiteral(value) : t.StringLiteral(value),
-            )
-          })
+        t.memberExpression(
+          t.identifier('styles'),
+          t.identifier(uniqueId)
         )
       )
     )
-  )
+    attrs.push(styleAttr)
+    // 将styleSheet添加到store
+    store.styleSheet = Object.assign({}, store.styleSheet, styleSheet)
+  }
 }

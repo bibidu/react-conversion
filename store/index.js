@@ -1,4 +1,6 @@
 module.exports = {
+  rnUsingTags: new Set(),
+  styleSheet: {},
   addUniqueIdCode: '',
   inlineStyle: {},
   externalStyle: {},

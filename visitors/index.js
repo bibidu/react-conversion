@@ -4,5 +4,6 @@ module.exports.compileVisitors = [
   require('./compile/BuildDomTree')
 ]
 module.exports.revertVisitors = [
+  require('./revert/AddTextWrapperTag'),
   require('./revert/index')
 ]

@@ -1,6 +1,8 @@
 const t = require('@babel/types')
+const store = require('../../store')
 
 const ViewTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+const TextTags = ['span']
 const tagAutoStyle = {
   h1: { fontSize: 32, fontWeight: 'bold' },
   h2: { fontSize: 24, fontWeight: 'bold' },
@@ -25,10 +27,17 @@ module.exports = function replaceTag(path) {
   if (clickEventIndex > -1) {
     _replace(convertTag, "TouchableOpacity")
     _replace(convertEvent, clickEventIndex, "onPress")
+    store.rnUsingTags.add("TouchableOpacity")
     return {}
   }
   if (ViewTags.includes(tagName)) {
     _replace(convertTag, "View")
+    store.rnUsingTags.add("View")
     return tagAutoStyle[tagName]
+  }
+  if (TextTags.includes(tagName)) {
+    _replace(convertTag, "Text")
+    store.rnUsingTags.add("Text")
+    return {}
   }
 }

@@ -7,6 +7,7 @@ class T extends React.Component{
     console.log('clickEvent')
   }
   renderTernary() {
+    const { show, visiable } = this.props
     return (
       <div>
         {
@@ -23,7 +24,6 @@ class T extends React.Component{
   }
   render() {
     const { list, show, visiable, msg1 } = this.props
-    this.setState({})
     return (
       <h6 id="container" style={{border: '1px solid #ccc'}}>
         {this.renderTernary()}
