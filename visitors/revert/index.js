@@ -70,7 +70,7 @@ function extractStyleAttr(attrs, def) {
 
 function setStyleSheet(attrs, injectStyles, uniqueId) {
   // 动态生成的新节点不含有uniqueId "如h1内的文本标签<Text />"
-  if (uniqueId) {
+  if (uniqueId && Object.keys(injectStyles).length) {
     uniqueId = uniqueId.slice(2)
     const styleSheet = {}
     styleSheet[uniqueId] = injectStyles
