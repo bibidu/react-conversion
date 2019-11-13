@@ -1,14 +1,15 @@
-const needExpandStyle = ['border', 'padding', 'margin']
+const transform = require('css-to-react-native').default
 
 module.exports = function replaceStyle(style) {
+  const serilizedStyleArr = premakeStyle(style)
+  const result = transform(serilizedStyleArr)
+  return result
+}
+
+function premakeStyle(style) {
+  const styleArr = []
   Object.entries(style).forEach(([key, value]) => {
-    if (needExpandStyle.includes(key)) {
-      delete style[key]
-      style[`${key}Top`] = value
-      style[`${key}Left`] = value
-      style[`${key}Right`] = value
-      style[`${key}Bottom`] = value
-    }
+    styleArr.push([key, typeof value === 'number' ? String(value) : value])
   })
-  return style
+  return styleArr
 }
