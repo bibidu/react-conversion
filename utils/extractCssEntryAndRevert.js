@@ -29,8 +29,6 @@ module.exports = function extractCssEntryAndRevert(code) {
               styleRequires.push(info)
             }
             // 临时方案 移除ts编译产生的:
-            // "use strict";
-
             // Object.defineProperty(exports, "__esModule", {
             //   value: true
             // });
@@ -42,6 +40,13 @@ module.exports = function extractCssEntryAndRevert(code) {
               if (firstChild.type === 'Identifier' && firstChild.name === 'exports') {
                 path.remove()
               }
+            }
+          },
+          // 临时方案 移除ts编译产生的:
+          // "use strict";
+          Directive(path) {
+            if (path.node.value.value === 'use strict') {
+              path.remove()
             }
           }
         }

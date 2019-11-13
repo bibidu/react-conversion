@@ -21,7 +21,7 @@ const {
   styleRequires: outStyleFileNames,
   code: removeCSSImportCode
 } = extractCssEntryAndRevert(code)
-console.log(outStyleFileNames)
+
 code = removeCSSImportCode
 
 outStyleFileNames.forEach(async ({ path: filePath }) => {
