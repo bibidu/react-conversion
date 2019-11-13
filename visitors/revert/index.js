@@ -17,13 +17,13 @@ module.exports = {
     const tagName = path.node.openingElement.name.name
     const attrs = path.node.openingElement.attributes
     const __className = extractUniqueId(attrs, '__className')
-    const initialInlineStyles = extractStyleAttr(attrs, {})
+    const initialInlineStyles = extractStyleAttr(attrs)
     // 替换标签及事件名
     const tagStyle = replaceTag(path)
     const injectStyles = inlineStyles[__className] || {}
-    const mergeStyle = Object.assign(injectStyles, tagStyle, initialInlineStyles)
+    const mergeStyle = Object.assign(injectStyles, tagStyle)
     // 替换样式
-    const styleSheet = setStyleSheet(attrs, replaceStyle(mergeStyle), __className)
+    const styleSheet = setStyleSheet(attrs, [replaceStyle(mergeStyle), replaceStyle(initialInlineStyles)], __className)
     // 移除__className
     removeUniqueId(path, ['__className'])
   },
@@ -48,7 +48,7 @@ function extractUniqueId(attrs, attr) {
   return ''
 }
 // TODO: 允许import引入css、并在解析完毕后删除css、允许class内static语法
-function extractStyleAttr(attrs, def) {
+function extractStyleAttr(attrs) {
   const style = {}
   for (let i = 0; i < attrs.length; i++) {
     const attrItem = attrs[i]
@@ -62,29 +62,53 @@ function extractStyleAttr(attrs, def) {
         array(attrItem.value.expression.properties).forEach(prop => {
           style[prop.key.name] = prop.value.value
         })
+        attrs.splice(i, 1)
       }
     }
   }
   return style
 }
 
+// injectStyles: Array | object
 function setStyleSheet(attrs, injectStyles, uniqueId) {
+  const haveAtLeastOneStyleAttr = injectStyles.some(style => Object.keys(style).length)
+
   // 动态生成的新节点不含有uniqueId "如h1内的文本标签<Text />"
-  if (uniqueId && Object.keys(injectStyles).length) {
+  if (uniqueId && haveAtLeastOneStyleAttr) {
+    const [mergeStyle, inlineStyle] = injectStyles
     uniqueId = uniqueId.slice(2)
     const styleSheet = {}
-    styleSheet[uniqueId] = injectStyles
-    const styleAttr = t.jsxAttribute(
-      t.jsxIdentifier('style'),
-      t.JSXExpressionContainer(
-        t.memberExpression(
-          t.identifier('styles'),
-          t.identifier(uniqueId)
-        )
-      )
-    )
-    attrs.push(styleAttr)
+    let styleArrs = []
+    if (Object.keys(mergeStyle).length) {
+      styleSheet[uniqueId] = mergeStyle
+      styleArrs.push(['styles', uniqueId])
+    }
+    if (Object.keys(inlineStyle).length) {
+      uniqueId = uniqueId + '_inline'
+      styleSheet[uniqueId] = inlineStyle
+      styleArrs.push(['styles', uniqueId])
+    }
     // 将styleSheet添加到store
     store.styleSheet = Object.assign({}, store.styleSheet, styleSheet)
+    attrs.push(createArrayJSXAttr('style', styleArrs))
   }
+}
+
+function createArrayJSXAttr(attrName, values) {
+  const styleNode = values.length > 1 ? t.arrayExpression(
+    values.map(value => (
+      t.memberExpression(
+        ...(value.map(v => t.identifier(v)))
+      )
+    ))
+  ) : t.memberExpression(
+    ...(values[0].map(v => t.identifier(v)))
+  )
+
+  return t.jsxAttribute(
+    t.jsxIdentifier(attrName),
+    t.JSXExpressionContainer(
+      styleNode
+    )
+  )
 }
