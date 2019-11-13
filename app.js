@@ -13,11 +13,16 @@ const {
 const store = require('./store')
 
 // 读取组件入口文件
-const code = fs.readFileSync(path.join(__dirname, '/component/index.js'), 'utf8')
+let code = fs.readFileSync(path.join(__dirname, '/component/index.js'), 'utf8')
 
 // 提取组件中的css引用并转换
 // TODO: import的语法编译
-const outStyleFileNames = extractCssEntryAndRevert(code)
+const {
+  styleRequires: outStyleFileNames,
+  code: removeCSSImportCode
+} = extractCssEntryAndRevert(code)
+console.log(outStyleFileNames)
+code = removeCSSImportCode
 
 outStyleFileNames.forEach(async ({ path: filePath }) => {
   const cssPATH = path.join(__dirname, 'component', filePath)
@@ -35,3 +40,4 @@ outStyleFileNames.forEach(async ({ path: filePath }) => {
   // console.log(store);
   
 })
+

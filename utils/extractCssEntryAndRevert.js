@@ -2,30 +2,56 @@ const babel = require("@babel/core")
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const t = require('@babel/types')
-const { ast2code } = require('.')
+const ts = require('typescript')
+const { ast2code, safeGet } = require('.')
 const { SourceMapConsumer } = require('source-map')
 
 module.exports = function extractCssEntryAndRevert(code) {
-  const result = babel.transform(code, {
-    // inputSourceMap: false,
-    sourceType: 'module',
-    presets: [
-      // "@babel/preset-env",
-      "@babel/preset-react",
-    ]
-  })
-  
-  const ast = parser.parse(result.code)
-  const styleRequires = []
-  traverse(ast, {
-    CallExpression(path) {
-      const { flag, info } = extractRequireCss(path.node)
-      if (flag) {
-        styleRequires.push(info)
-      }
+  const compiled = ts.transpileModule(code, {
+    compilerOptions: {
+      target: "ES6",
+      esModuleInterop: true,
+      module: ts.ModuleKind.CommonJS,
+      jsx: 'preserve'
     }
   })
-  return styleRequires
+  
+  const styleRequires = []
+  const r = babel.transformSync(compiled.outputText, {
+    plugins: [
+      ["@babel/plugin-syntax-jsx"],
+      { 
+        visitor: {
+          CallExpression(path) {
+            const { flag, info } = extractRequireCss(path.node)
+            if (flag) {
+              path.remove()
+              styleRequires.push(info)
+            }
+            // 临时方案 移除ts编译产生的:
+            // "use strict";
+
+            // Object.defineProperty(exports, "__esModule", {
+            //   value: true
+            // });
+            if (
+              safeGet(path, 'path.node.callee.object.name') === 'Object'
+              && safeGet(path, 'path.node.callee.property.name') === 'defineProperty'
+            ) {
+              const firstChild = path.node.arguments[0]
+              if (firstChild.type === 'Identifier' && firstChild.name === 'exports') {
+                path.remove()
+              }
+            }
+          }
+        }
+      }
+    ],
+  })
+  return {
+    styleRequires,
+    code: r.code
+  }
 }
 
 function extractRequireCss(node) {

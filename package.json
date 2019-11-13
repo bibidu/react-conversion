@@ -28,7 +28,8 @@
     "postcss": "^7.0.21",
     "postcss-import": "^12.0.1",
     "postcss-node-sass": "^2.1.8",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.0.0",
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
